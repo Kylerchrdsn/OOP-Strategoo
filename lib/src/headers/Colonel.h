@@ -6,7 +6,7 @@
 #ifndef COLONEL_H
 #define COLONEL_H
 
-#include"Piece.h"
+#include "Piece.h"
 
 class Colonel : public Piece
 {

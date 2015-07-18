@@ -11,7 +11,7 @@
 Game::Game() : screen(0)
 {
 	//set player, computer and board pointers to null
-	gPlayer = 0;
+	gHuman = 0;
 	gComputer = 0;
 	gBoard = 0;
 
@@ -57,7 +57,7 @@ Game::~Game()
 	}
 
 	//delete player, computer, and board
-	delete gPlayer;
+	delete gHuman;
 	delete gComputer;
 	delete gBoard;
 
@@ -386,7 +386,7 @@ bool Game::login()
 	inputtedName = name->getInput();
 
 	//create new player with name that was input
-	gPlayer = new Player(inputtedName);
+	gHuman = new Human(inputtedName);
 
 	return true;
 }
@@ -595,7 +595,7 @@ bool Game::doSetPiece()
 		if(isPieceSelected && isButtonSelected && !namingPiece)
 		{
 			//find an unplaced piece of the correct type
-			unplacedPiece = gPlayer->findUnplacedPiece(buttonRank);
+			unplacedPiece = gHuman->findUnplacedPiece(buttonRank);
 
 			//if there's a piece to set
 			if(unplacedPiece != 0)
@@ -625,7 +625,7 @@ bool Game::doSetPiece()
 			}
 
 			//find an unplaced piece of the correct type
-			unplacedPiece = gPlayer->findUnplacedPiece(buttonRank);
+			unplacedPiece = gHuman->findUnplacedPiece(buttonRank);
 
 			//if there's no unplaced pieces of this rank
 			if(unplacedPiece == 0)
@@ -866,7 +866,7 @@ bool Game::doPlayGame()
 							//remove pieces from player and computer collections
 							if(selected->getOwner() == 0)
 							{
-								gPlayer->clearPiece(selected->getBoardSpace());
+								gHuman->clearPiece(selected->getBoardSpace());
 							}
 							else
 							{
@@ -875,7 +875,7 @@ bool Game::doPlayGame()
 
 							if(destination->getOwner() == 0)
 							{
-								gPlayer->clearPiece(destination->getBoardSpace());
+								gHuman->clearPiece(destination->getBoardSpace());
 							}
 							else
 							{
@@ -914,7 +914,7 @@ bool Game::doPlayGame()
 							//remove pieces from player and computer collections
 							if(selected->getOwner() == 0)
 							{
-								gPlayer->clearPiece(selected->getBoardSpace());
+								gHuman->clearPiece(selected->getBoardSpace());
 							}
 							else
 							{
@@ -950,7 +950,7 @@ bool Game::doPlayGame()
 							//remove pieces from player and computer collections
 							if(destination->getOwner() == 0)
 							{
-								gPlayer->clearPiece(destination->getBoardSpace());
+								gHuman->clearPiece(destination->getBoardSpace());
 							}
 							else
 							{
@@ -1114,10 +1114,10 @@ bool Game::doPlayGame()
 						setPreviousState(STATE_PLAYGAME);
 
 						//update player stats
-						gPlayer->setGamesPlayed(1);
+						gHuman->setGamesPlayed(1);
 
 						//save stats to file
-						gPlayer->saveStatistics();
+						gHuman->saveStatistics();
 
 						//stop current music
 						gameSound->stopMusic();
@@ -1257,7 +1257,7 @@ bool Game::doStatistics()
 {
 	bool showingStatistics = true;
 
-	gPlayer->setStatisticsSprites();
+	gHuman->setStatisticsSprites();
 
 	while(showingStatistics)
 	{
@@ -1296,7 +1296,7 @@ bool Game::doStatistics()
 		statisticsBG->show(getScreen());
 
 		//apply statistics messages to screen
-		gPlayer->displayStatistics(getScreen());
+		gHuman->displayStatistics(getScreen());
 
 		//render to the screen
 		//if rendering was unsuccessful
@@ -1399,7 +1399,7 @@ void Game::startGame()
 			temp = new Marshal();
 
 			addPiece(temp);
-			gPlayer->addPiece(temp);
+			gHuman->addPiece(temp);
 		}
 		else
 		{
@@ -1419,7 +1419,7 @@ void Game::startGame()
 			temp = new General();
 
 			addPiece(temp);
-			gPlayer->addPiece(temp);
+			gHuman->addPiece(temp);
 		}
 		else
 		{
@@ -1439,7 +1439,7 @@ void Game::startGame()
 			temp = new Colonel();
 
 			addPiece(temp);
-			gPlayer->addPiece(temp);
+			gHuman->addPiece(temp);
 		}
 		else
 		{
@@ -1459,7 +1459,7 @@ void Game::startGame()
 			temp = new Major();
 
 			addPiece(temp);
-			gPlayer->addPiece(temp);
+			gHuman->addPiece(temp);
 		}
 		else
 		{
@@ -1479,7 +1479,7 @@ void Game::startGame()
 			temp = new Captain();
 
 			addPiece(temp);
-			gPlayer->addPiece(temp);
+			gHuman->addPiece(temp);
 		}
 		else
 		{
@@ -1499,7 +1499,7 @@ void Game::startGame()
 			temp = new Lieutenant();
 
 			addPiece(temp);
-			gPlayer->addPiece(temp);
+			gHuman->addPiece(temp);
 		}
 		else
 		{
@@ -1519,7 +1519,7 @@ void Game::startGame()
 			temp = new Sergeant();
 
 			addPiece(temp);
-			gPlayer->addPiece(temp);
+			gHuman->addPiece(temp);
 		}
 		else
 		{
@@ -1539,7 +1539,7 @@ void Game::startGame()
 			temp = new Miner();
 
 			addPiece(temp);
-			gPlayer->addPiece(temp);
+			gHuman->addPiece(temp);
 		}
 		else
 		{
@@ -1559,7 +1559,7 @@ void Game::startGame()
 			temp = new Scout();
 
 			addPiece(temp);
-			gPlayer->addPiece(temp);
+			gHuman->addPiece(temp);
 		}
 		else
 		{
@@ -1579,7 +1579,7 @@ void Game::startGame()
 			temp = new Spy();
 
 			addPiece(temp);
-			gPlayer->addPiece(temp);
+			gHuman->addPiece(temp);
 		}
 		else
 		{
@@ -1599,7 +1599,7 @@ void Game::startGame()
 			temp = new Bomb();
 
 			addPiece(temp);
-			gPlayer->addPiece(temp);
+			gHuman->addPiece(temp);
 		}
 		else
 		{
@@ -1619,7 +1619,7 @@ void Game::startGame()
 			temp = new Flag();
 
 			addPiece(temp);
-			gPlayer->addPiece(temp);
+			gHuman->addPiece(temp);
 		}
 		else
 		{
@@ -1646,7 +1646,7 @@ void Game::resetGame()
 
 	//clear board's, player's, and computer's collections of pieces
 	gBoard->clearPieces();
-	gPlayer->clearPieces();
+	gHuman->clearPieces();
 	gComputer->clearPieces();
 
 	//reset piece buttons
@@ -1710,15 +1710,15 @@ bool Game::checkPlayerWins()
 
 	if(!flagExists || !moveablePieceExists)
 	{
-		gPlayer->setGamesWon(1);
+		gHuman->setGamesWon(1);
 		
 		if(!flagExists)
 		{
-			gPlayer->setFlagsCaptured(1);
+			gHuman->setFlagsCaptured(1);
 		}
 		else
 		{
-			gPlayer->setGenocide(1);
+			gHuman->setGenocide(1);
 		}
 		
 		return true;
@@ -1743,12 +1743,12 @@ bool Game::checkComputerWins()
 	Piece* temp = 0;
 
 	//number of pieces player has
-	int numPieces = gPlayer->getNumPieces();
+	int numPieces = gHuman->getNumPieces();
 
 	//check for existence of player's flag
 	for(int i = 0; i < numPieces; i++)
 	{
-		temp = gPlayer->findPieceAtPosition(i);
+		temp = gHuman->findPieceAtPosition(i);
 
 		if(temp->getRank() == 12)
 		{
@@ -1759,7 +1759,7 @@ bool Game::checkComputerWins()
 	//check for existence of moveable piece
 	while(!moveablePieceExists && j < numPieces)
 	{
-		temp = gPlayer->findPieceAtPosition(j);
+		temp = gHuman->findPieceAtPosition(j);
 
 		if(isMoveablePiece(temp, 0))
 		{
@@ -1774,15 +1774,15 @@ bool Game::checkComputerWins()
 
 	if(!flagExists || !moveablePieceExists)
 	{
-		gPlayer->setGamesLost(1);
+		gHuman->setGamesLost(1);
 
 		if(!flagExists)
 		{
-			gPlayer->setCapturedFlags(1);
+			gHuman->setCapturedFlags(1);
 		}
 		else
 		{
-			gPlayer->setTimesExtinct(1);
+			gHuman->setTimesExtinct(1);
 		}
 		
 		return true;
@@ -2042,7 +2042,7 @@ void Game::moveComputerPiece()
 		//remove pieces from player and computer collections
 		if(selected->getOwner() == 0)
 		{
-			gPlayer->clearPiece(selected->getBoardSpace());
+			gHuman->clearPiece(selected->getBoardSpace());
 		}
 		else
 		{
@@ -2051,7 +2051,7 @@ void Game::moveComputerPiece()
 
 		if(destination->getOwner() == 0)
 		{
-			gPlayer->clearPiece(destination->getBoardSpace());
+			gHuman->clearPiece(destination->getBoardSpace());
 		}
 		else
 		{
@@ -2088,7 +2088,7 @@ void Game::moveComputerPiece()
 		//remove pieces from player and computer collections
 		if(selected->getOwner() == 0)
 		{
-			gPlayer->clearPiece(selected->getBoardSpace());
+			gHuman->clearPiece(selected->getBoardSpace());
 		}
 		else
 		{
@@ -2123,7 +2123,7 @@ void Game::moveComputerPiece()
 		//remove pieces from player and computer collections
 		if(destination->getOwner() == 0)
 		{
-			gPlayer->clearPiece(destination->getBoardSpace());
+			gHuman->clearPiece(destination->getBoardSpace());
 		}
 		else
 		{

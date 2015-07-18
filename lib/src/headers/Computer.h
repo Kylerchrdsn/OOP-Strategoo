@@ -9,38 +9,31 @@
 #include <vector>
 #include <algorithm>
 #include "Piece.h"
+#include "Player.h"
 
-class Computer
+class Computer : public Player
 {
-public:
-	//constructor and destructor
+  public:
+    //constructor and destructor
     Computer();
-
-	//collection functions
-	void addPiece(Piece* const piece);
+    //collection functions
+    void addPiece(Piece* const piece);
     void clearPiece(const int boardSpace);
     inline void clearPieces();
-	Piece* findPieceAtPosition(const int position);
-	inline int getNumPieces() const;
+    Piece* findPieceAtPosition(const int position);
+    inline int getNumPieces() const;
+    //piece functions
+    void setPieces();
+  //end public
 
-	//piece functions
-	void setPieces();
-
-private:
-	//collection of pieces
-    std::vector<Piece*> pieces;
+  private:
+    //collection of pieces
+      std::vector<Piece*> pieces;
+  //end private
 };
-
 //*****************************************************
-inline void Computer::clearPieces()
-{
-	pieces.clear();
-}
-
+inline void Computer::clearPieces(){ pieces.clear(); }
 //*****************************************************
-inline int Computer::getNumPieces() const
-{
-	return pieces.size();
-}
+inline int Computer::getNumPieces() const{ return pieces.size(); }
 
 #endif

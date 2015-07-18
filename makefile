@@ -1,5 +1,5 @@
-strategoo : check yum-install Main.o Board.o Bomb.o Captain.o Colonel.o Computer.o EmptySpace.o Flag.o Game.o General.o Lieutenant.o Major.o Marshal.o Miner.o Piece.o PieceButton.o Player.o Scout.o Selector.o Sergeant.o Sound.o Sprite.o Spy.o Statistics.o StringInput.o
-	g++ bin/Main.o bin/Board.o bin/Bomb.o bin/Captain.o bin/Colonel.o bin/Computer.o bin/EmptySpace.o bin/Flag.o bin/Game.o bin/General.o bin/Lieutenant.o bin/Major.o bin/Marshal.o bin/Miner.o bin/Piece.o bin/PieceButton.o bin/Player.o bin/Scout.o bin/Selector.o bin/Sergeant.o bin/Sound.o bin/Sprite.o bin/Spy.o bin/Statistics.o bin/StringInput.o -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf -o strategoo
+strategoo : check yum-install Human.o Main.o Board.o Bomb.o Captain.o Colonel.o Computer.o EmptySpace.o Flag.o Game.o General.o Lieutenant.o Major.o Marshal.o Miner.o Piece.o PieceButton.o Player.o Scout.o Selector.o Sergeant.o Sound.o Sprite.o Spy.o Statistics.o StringInput.o
+	g++ bin/Human.o bin/Main.o bin/Board.o bin/Bomb.o bin/Captain.o bin/Colonel.o bin/Computer.o bin/EmptySpace.o bin/Flag.o bin/Game.o bin/General.o bin/Lieutenant.o bin/Major.o bin/Marshal.o bin/Miner.o bin/Piece.o bin/PieceButton.o bin/Player.o bin/Scout.o bin/Selector.o bin/Sergeant.o bin/Sound.o bin/Sprite.o bin/Spy.o bin/Statistics.o bin/StringInput.o -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf -o strategoo
 
 check: gcc-exists yum-exists
 gcc-exists:; @which g++ > /dev/null
@@ -57,3 +57,5 @@ Sprite.o :
 	g++ -c lib/src/Sprite.cpp -Wall -o bin/Sprite.o
 Piece.o :
 	g++ -c lib/src/Piece.cpp -Wall -o bin/Piece.o
+Human.o :
+	g++ -c lib/src/Human.cpp -Wall -o bin/Human.o

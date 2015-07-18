@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <sstream>
 #include "Player.h"
+#include "Human.h"
 #include "Computer.h"
 #include "Board.h"
 #include "Sprite.h"
@@ -105,7 +106,7 @@ private:
 	SDL_Event gEvent;
 
 	//player, computer, and board
-	Player* gPlayer;
+	Human* gHuman;
 	Computer* gComputer;
 	Board* gBoard;
 
