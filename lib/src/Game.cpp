@@ -8,39 +8,32 @@
 #include <fstream>
 #include "headers/Game.h"
 
-Game::Game() : screen(0)
-{
+//*****************************************************
+Game::Game() : screen(0){
 	//set player, computer and board pointers to null
 	gHuman = 0;
 	gComputer = 0;
 	gBoard = 0;
-
 	//set initial game state
 	setState(STATE_INTRO);
 	setPreviousState(STATE_INTRO);
-
 	//set turn
 	setTurn(0);
-
 	//set booleans to false
 	setIsPieceSelected(false);
 	setIsButtonSelected(false);
-
 	//dynamically allocate sprite objects
-	introBG = new Sprite();
-	loginBG = new Sprite();
-	startMenuBG = new Sprite();
-	setPieceBG = new Sprite();
-	playGameBG = new Sprite();
-	menuBG = new Sprite();
+	introBG      = new Sprite();
+	loginBG      = new Sprite();
+	startMenuBG  = new Sprite();
+	setPieceBG   = new Sprite();
+	playGameBG   = new Sprite();
+	menuBG       = new Sprite();
 	statisticsBG = new Sprite();
-
 	gameSound = new Sound();
 }
-
 //*****************************************************
-Game::~Game()
-{
+Game::~Game(){
 	//delete dynamically allocated sprites
 	delete introBG;
 	delete loginBG;
@@ -51,8 +44,7 @@ Game::~Game()
 	delete statisticsBG;
 
 	//delete all pieces
-	for(int i = 0; i < static_cast<int>(pieces.size()); i++)
-	{
+	for(int i = 0; i < static_cast<int>(pieces.size()); i++){
 		delete pieces[i];
 	}
 
@@ -60,30 +52,24 @@ Game::~Game()
 	delete gHuman;
 	delete gComputer;
 	delete gBoard;
-
 	//delete selector and string input
 	delete gSelector;
 	delete name;
 
 	//delete piece buttons
-	for(int i = 0; i < 12; i++)
-	{
+	for(int i = 0; i < 12; i++){
 		delete buttons[i];
 	}
 
 	//delete overlays
 	delete pieceOverlay;
 	delete buttonOverlay;
-
 	//delete set piece finish
 	delete finishedSetPiece;
-
 	delete namePieceBG;
-
 	//delete game result images
 	delete playerWinsImage;
 	delete computerWinsImage;
-
 	//delete play-by-plays
 	delete playByPlayHeader;
 	delete playByPlayArea;
@@ -96,132 +82,100 @@ Game::~Game()
 	delete playByPlaySeven;
 	delete playByPlayEight;
 	delete playByPlayNine;
-
 	//delete sound class
 	delete gameSound;
 }
-
 //*****************************************************
-void Game::setState(const int gameState)
-{
+void Game::setState(const int gameState){
 	//state must be a number from 0 to 7
-	if(gameState > -1 && gameState < 8)
-	{
+	if(gameState > -1 && gameState < 8){
 		gameState_ = gameState;
 	}
 }
-
 //*****************************************************
-void Game::setPreviousState(const int gameState)
-{
+void Game::setPreviousState(const int gameState){
 	//state must be a number from 0 to 7
-	if(gameState > -1 && gameState < 8)
-	{
+	if(gameState > -1 && gameState < 8){
 		previousState_ = gameState;
 	}
 }
-
 //*****************************************************
-void Game::setTurn(const int turn)
-{
-	if(turn == 0 || turn == 1)
-	{
+void Game::setTurn(const int turn){
+	if(turn == 0 || turn == 1){
 		turn_ = turn;
 	}
 }
-
 //*****************************************************
-void Game::setScreen(SDL_Surface* s)
-{
+void Game::setScreen(SDL_Surface* s){
 	//delete old screen
 	SDL_FreeSurface(screen);
 
-	if(s != 0)
-	{
+	if(s != 0){
 		screen = s;
 	}
 }
-
 //*****************************************************
-void Game::setIsPieceSelected(const bool selected)
-{
+void Game::setIsPieceSelected(const bool selected){
 	isPieceSelected = selected;
 }
-
 //*****************************************************
-void Game::setIsButtonSelected(const bool selected)
-{
+void Game::setIsButtonSelected(const bool selected){
 	isButtonSelected = selected;
 }
-
 //*****************************************************
-bool Game::initialize()
-{
+bool Game::initialize(){
 	//initialize SDL
 	SDL_Init(SDL_INIT_EVERYTHING);
 
 	//initialize SDL_ttf
-	if(TTF_Init() == -1)
-	{
+	if(TTF_Init() == -1){
 		return false;
 	}
 
 	//initialize SDL_mixer
-	if(Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
-	{
+	if(Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1){
 		return false;
 	}
 
 	//load all sound files into sound class
 	gameSound->loadSounds();
-
 	//set up screen
 	setScreen(SDL_SetVideoMode(800, 600, 32, SDL_SWSURFACE));
-
 	SDL_WM_SetCaption("strategOO", "strategOO");
 
 	//load images
-	if(!introBG->load("lib/images/intro.png"))
-	{
+	if(!introBG->load("lib/images/intro.png")){
 		return false;
 	}
 
-	if(!loginBG->load("lib/images/login.png"))
-	{
+	if(!loginBG->load("lib/images/login.png")){
 		return false;
 	}
 
-	if(!startMenuBG->load("lib/images/startmenu.png"))
-	{
+	if(!startMenuBG->load("lib/images/startmenu.png")){
 		return false;
 	}
 
-	if(!setPieceBG->load("lib/images/board.png"))
-	{
+	if(!setPieceBG->load("lib/images/board.png")){
 		return false;
 	}
 
-	if(!playGameBG->load("lib/images/board.png"))
-	{
+	if(!playGameBG->load("lib/images/board.png")){
 		return false;
 	}
 
-	if(!menuBG->load("lib/images/ingamemenu.png"))
-	{
+	if(!menuBG->load("lib/images/ingamemenu.png")){
 		return false;
 	}
 
-	if(!statisticsBG->load("lib/images/statistics.png"))
-	{
+	if(!statisticsBG->load("lib/images/statistics.png")){
 		return false;
 	}
 
 	//create selector
 	gSelector = new Selector();
-
 	//create string input
 	name = new StringInput();
-
 	//create piece buttons
 	buttons[0] = new PieceButton(0, 500, 11, "lib/images/bombbutton.png");
 	buttons[1] = new PieceButton(0, 200, 6, "lib/images/captainbutton.png");
@@ -235,22 +189,17 @@ bool Game::initialize()
 	buttons[9] = new PieceButton(0, 400, 2, "lib/images/scoutbutton.png");
 	buttons[10] = new PieceButton(0, 300, 4, "lib/images/sergeantbutton.png");
 	buttons[11] = new PieceButton(0, 450, 1, "lib/images/spybutton.png");
-
 	//create overlays
 	pieceOverlay = new Sprite(0, 0, "lib/images/pieceoverlay.png", 100);
 	buttonOverlay = new Sprite(0, 0, "lib/images/buttonoverlay.png", 100);
-
 	//create set piece finish image
 	finishedSetPiece = new Sprite(260, 50);
 	finishedSetPiece->load("lib/images/gamestart.png", 255, 255, 255);
-
 	//create name piece image
 	namePieceBG = new Sprite(260, 50, "lib/images/namingpiece.png");
-
 	//create game result images
 	playerWinsImage = new Sprite(260, 50, "lib/images/playerwins.png");
 	computerWinsImage = new Sprite(260, 50, "lib/images/computerwins.png");
-
 	//create play by plays
 	playByPlayHeader = new Sprite(0, 0, "lib/images/playbyplay.png");
 	playByPlayArea = new Sprite(0, 50, "lib/images/playbyplayarea.png");
@@ -264,102 +213,69 @@ bool Game::initialize()
 	playByPlayEight = new Sprite(5, 280);
 	playByPlayNine = new Sprite(5, 305);
 
-	if(getScreen() == 0)
-	{
+	if(getScreen() == 0){
 		return false;
 	}
 
 	return true;
 }
-
 //*****************************************************
-void Game::cleanUp() const
-{
+void Game::cleanUp() const{
 	//quit SDL_ttf
 	TTF_Quit();
-
 	//quit SDL_mixer
 	Mix_CloseAudio();
-
 	//quit SDL
 	SDL_Quit();
 }
-
 //*****************************************************
-bool Game::render() const
-{
-	if(SDL_Flip(getScreen()) == -1)
-	{
+bool Game::render() const{
+	if(SDL_Flip(getScreen()) == -1){
 		return false;
 	}
 
 	return true;
 }
-
 //*****************************************************
-bool Game::doIntro()
-{
-	while(SDL_PollEvent(&gEvent))
-	{
-		//if the user has exited the window
-		if(gEvent.type == SDL_QUIT)
-		{
-			//set next state to exit
-			setState(STATE_EXIT);
-		}
-		//else if the user has hit the enter key
-		else if(gEvent.type == SDL_KEYDOWN)
-		{
-			if(gEvent.key.keysym.sym == SDLK_RETURN)
-			{
+bool Game::doIntro(){
+	while(SDL_PollEvent(&gEvent)){
+		if(gEvent.type == SDL_QUIT){          // if the user has exited the window
+			setState(STATE_EXIT);               // set next state to exit
+		}else if(gEvent.type == SDL_KEYDOWN){ // else if the user has hit the enter key
+			if(gEvent.key.keysym.sym == SDLK_RETURN){
 				setState(STATE_LOGIN);
 			}
 		}
 	}
 
-	//start menu background music and stop any previously playing music
-	//gameSound->stopMusic();
+	// start menu background music and stop any previously playing music
+	// gameSound->stopMusic();
 	gameSound->playMenuTheme();
-
-	//apply the intro image to the screen
+	// apply the intro image to the screen
 	introBG->show(getScreen());
 
-	//render to the screen
-	//if rendering was unsuccessful
-	if(!render())
-	{
-		//return 1, closing the program
-		return false;
+	// render to the screen
+	if(!render()){  // if rendering was unsuccessful
+		return false; // return 1, closing the program
 	}
 
 	return true;
 }
-
 //*****************************************************
-bool Game::login()
-{
-	bool isLoggingIn = true;
+bool Game::login(){
+	bool        isLoggingIn = true;
 	std::string inputtedName;
 
-	while(isLoggingIn)
-	{
-		while(SDL_PollEvent(&gEvent))
-		{
+	while(isLoggingIn){
+		while(SDL_PollEvent(&gEvent)){
 			//if the user has exited the window
-			if(gEvent.type == SDL_QUIT)
-			{
+			if(gEvent.type == SDL_QUIT){
 				//set next state to exit
 				setState(STATE_EXIT);
-
 				isLoggingIn = false;
-			}
-			//else if the user has hit the enter key
-			else if(gEvent.type == SDL_KEYDOWN)
-			{
-				if(gEvent.key.keysym.sym == SDLK_RETURN)
-				{
+			}else if(gEvent.type == SDL_KEYDOWN){ // else if the user has hit the enter key
+				if(gEvent.key.keysym.sym == SDLK_RETURN){
 					setState(STATE_STARTMENU);
-
 					isLoggingIn = false;
 				}
 			}
@@ -369,14 +285,12 @@ bool Game::login()
 
 		//apply the login image to the screen
 		loginBG->show(getScreen());
-
 		//apply input text to screen
 		name->show(getScreen());
 
 		//render to the screen
 		//if rendering was unsuccessful
-		if(!render())
-		{
+		if(!render()){
 			//return 1, closing the program
 			return false;
 		}
@@ -384,25 +298,20 @@ bool Game::login()
 
 	//getting current user's name
 	inputtedName = name->getInput();
-
 	//create new player with name that was input
 	gHuman = new Human(inputtedName);
 
 	return true;
 }
-
 //*****************************************************
-bool Game::doStartMenu()
-{
+bool Game::doStartMenu(){
 	//play menu music if not already playing
 	//gameSound->stopMusic();
 	gameSound->playMenuTheme();
-	
-	while(SDL_PollEvent(&gEvent))
-	{
+
+	while(SDL_PollEvent(&gEvent)){
 		//if the user has exited the window
-		if(gEvent.type == SDL_QUIT)
-		{
+		if(gEvent.type == SDL_QUIT){
 			//set next state to exit
 			setState(STATE_EXIT);
 		}
@@ -411,21 +320,14 @@ bool Game::doStartMenu()
 		gSelector->handleInput(gEvent);
 
 		//if the user has hit the enter key
-		if(gEvent.type == SDL_KEYDOWN)
-		{
-			if(gEvent.key.keysym.sym == SDLK_RETURN)
-			{
-				if(gSelector->getChoice() == 0)
-				{
+		if(gEvent.type == SDL_KEYDOWN){
+			if(gEvent.key.keysym.sym == SDLK_RETURN){
+				if(gSelector->getChoice() == 0){
 					setState(STATE_SETPIECE);
-
 					gSelector->reset();
-				}
-				else if(gSelector->getChoice() == 1)
-				{
+				}else if(gSelector->getChoice() == 1){
 					setState(STATE_STATISTICS);
 					setPreviousState(STATE_STARTMENU);
-
 					gSelector->reset();
 				}
 			}
@@ -433,10 +335,8 @@ bool Game::doStartMenu()
 	}
 
 	//move the selector
-	if(gSelector->move())
-	{
-		if(getState() == STATE_STARTMENU)
-		{
+	if(gSelector->move()){
+		if(getState() == STATE_STARTMENU){
 			//play sound effect if selector was moved
 			gameSound->playMoveSelector();
 		}
@@ -448,121 +348,80 @@ bool Game::doStartMenu()
 
 	//render to the screen
 	//if rendering was unsuccessful
-	if(!render())
-	{
+	if(!render()){
 		//return 1, closing the program
 		return false;
 	}
 
 	return true;
 }
-
 //*****************************************************
-bool Game::doSetPiece()
-{
+bool Game::doSetPiece(){
 	//start the game
 	startGame();
-
 	//set computer pieces
 	gComputer->setPieces();
-
 	//current piece button selection and
 	//current piece selection
 	PieceButton* currentButton = 0;
 	Piece* currentPiece = 0;
-
 	//clicked piece and unplaced piece
 	Piece* clickedPiece = 0;
 	Piece* unplacedPiece = 0;
-
 	//button rank
 	int buttonRank = -1;
-
 	//setPiece loop boolean and finished boolean
 	bool isSettingPiece = true,
-		 finished = false,
-		 namingPiece = false;
+       finished = false,
+       namingPiece = false;
+  std::ifstream infile;
+  std::string temp;
+  infile.open("names.txt");
+  getline(infile, temp);
+  name->setFont("lib/fonts/Therfont.ttf", 58);
+  name->setMessageSurface(temp);
 
-    std::ifstream infile;
-    std::string temp;
-
-    infile.open("names.txt");
-
-    getline(infile, temp);
-
-    name->setFont("lib/fonts/Therfont.ttf", 58);
-    name->setMessageSurface(temp);
-
-	while(isSettingPiece)
-	{
-		while(SDL_PollEvent(&gEvent))
-		{
-			//if the user has exited the window
-			if(gEvent.type == SDL_QUIT)
-			{
+	while(isSettingPiece){
+		while(SDL_PollEvent(&gEvent)){
+			if(gEvent.type == SDL_QUIT){          // if the user has exited the window
 				//set next state to exit
 				setState(STATE_EXIT);
-
 				isSettingPiece = false;
-			}
-			//else if the user has hit the enter key
-			else if(gEvent.type == SDL_KEYDOWN)
-			{
-				if(gEvent.key.keysym.sym == SDLK_RETURN)
-				{
-				    if(finished)
-				    {
-                        setState(STATE_PLAYGAME);
-
-                        isSettingPiece = false;
-				    }
-				}
-				else if(gEvent.key.keysym.sym == SDLK_RCTRL || gEvent.key.keysym.sym == SDLK_LCTRL)
-				{
+			}else if(gEvent.type == SDL_KEYDOWN){ //else if the user has hit the enter key
+				if(gEvent.key.keysym.sym == SDLK_RETURN){
+				  if(finished){
+            setState(STATE_PLAYGAME);
+            isSettingPiece = false;
+				  }
+				}else if(gEvent.key.keysym.sym == SDLK_RCTRL || gEvent.key.keysym.sym == SDLK_LCTRL){
 					namingPiece = false;
 				}
 			}
 
 			//if the player is not naming a piece
-			if(!namingPiece)
-			{
-				//handle piece button input
-				for(int i = 0; i < 12; i++)
-				{
+			if(!namingPiece){
+				for(int i = 0; i < 12; i++){      // handle piece button input
 					buttons[i]->handleInput(gEvent);
 				}
-
-				//handle board piece input
-				gBoard->handlePieceInput(gEvent);
-			}
-			//if the player is naming a piece
-			else
-			{
-                //handle string input for naming of pieces
-                name->handleInput(gEvent, 6);
+				gBoard->handlePieceInput(gEvent); //handle board piece input
+			}else{                              // if the player is naming a piece
+        name->handleInput(gEvent, 6);     // handle string input for naming of pieces
 			}
 		}
 
 		//check to see if a button was selected
-		for(int i = 0; i < 12; i++)
-		{
-			if(buttons[i]->getIsSelected())
-			{
+		for(int i = 0; i < 12; i++){
+			if(buttons[i]->getIsSelected()){
 				currentButton = buttons[i];
-
 				//reset button
 				buttons[i]->setIsSelected(false);
-
 				//set overlay to cover current button
 				buttonOverlay->setXPos(currentButton->getXPos());
 				buttonOverlay->setYPos(currentButton->getYPos());
-
 				//get button rank
 				buttonRank = buttons[i]->getRank();
-
 				//set isButtonSelected to true
 				setIsButtonSelected(true);
-
 				//play button press sound effect
 				gameSound->playButtonPress();
 			}
@@ -570,56 +429,39 @@ bool Game::doSetPiece()
 
 		//check to see if a piece was selected
 		clickedPiece = gBoard->findSelectedPiece();
-
 		//if a selected piece was found and is in one
 		//of player's boardspaces that isn't already occupied
 		//and a piece button that is available is already selected
-		if(clickedPiece != 0 && (clickedPiece->getBoardSpace() > 59) &&
-		   (clickedPiece->getRank() == 0) && (currentButton != 0) &&
-		   currentButton->getIsAvailable())
-		{
+		if(clickedPiece != 0 && (clickedPiece->getBoardSpace() > 59) && (clickedPiece->getRank() == 0) && (currentButton != 0) && currentButton->getIsAvailable()){
 			//set currently selected piece
 			currentPiece = clickedPiece;
-
 			//set isPieceSelected to true
 			setIsPieceSelected(true);
-
 			//set namingPiece to true
 			namingPiece = true;
-
 			//reset clickedPiece
 			clickedPiece = 0;
 		}
 
 		//check to see if a piece was set
-		if(isPieceSelected && isButtonSelected && !namingPiece)
-		{
+		if(isPieceSelected && isButtonSelected && !namingPiece){
 			//find an unplaced piece of the correct type
 			unplacedPiece = gHuman->findUnplacedPiece(buttonRank);
-
 			//if there's a piece to set
-			if(unplacedPiece != 0)
-			{
-			    //name the piece
-			    unplacedPiece->setName(name->getInput());
-
-                getline(infile, temp);
-
-                //reset the StringInput string
-			    name->setMessageSurface(temp);
-
+			if(unplacedPiece != 0){
+			  //name the piece
+			  unplacedPiece->setName(name->getInput());
+        getline(infile, temp);
+        //reset the StringInput string
+			  name->setMessageSurface(temp);
 				//swap boardspace and rendering coordinates with emptyspace
 				swapLocation(currentPiece, unplacedPiece);
-
 				//remove emptyspace from board's collection
 				gBoard->clearPiece(currentPiece->getBoardSpace());
-
 				//add set piece to board's collection
 				gBoard->addPiece(unplacedPiece);
-
 				//reset isPieceSelected
 				setIsPieceSelected(false);
-
 				//play place piece sound effect
 				gameSound->playPlacePiece();
 			}
@@ -628,11 +470,9 @@ bool Game::doSetPiece()
 			unplacedPiece = gHuman->findUnplacedPiece(buttonRank);
 
 			//if there's no unplaced pieces of this rank
-			if(unplacedPiece == 0)
-			{
+			if(unplacedPiece == 0){
 				//disable the piece button
 				currentButton->setIsAvailable(false);
-
 				//set isButtonSelected to false
 				setIsButtonSelected(false);
 			}
@@ -642,10 +482,8 @@ bool Game::doSetPiece()
 		finished = true;
 
 		//check to see if all pieces are set
-		for(int i = 0; i < 12; i++)
-		{
-			if(buttons[i]->getIsAvailable())
-			{
+		for(int i = 0; i < 12; i++){
+			if(buttons[i]->getIsAvailable()){
 				finished = false;
 			}
 		}
@@ -654,14 +492,12 @@ bool Game::doSetPiece()
 		setPieceBG->show(getScreen());
 
 		//apply button images to screen
-		for(int i = 0; i < 12; i++)
-		{
+		for(int i = 0; i < 12; i++){
 			buttons[i]->show(getScreen());
 		}
 
 		//render button overlay if needed
-		if(getIsButtonSelected())
-		{
+		if(getIsButtonSelected()){
 			buttonOverlay->show(getScreen());
 		}
 
@@ -669,22 +505,19 @@ bool Game::doSetPiece()
 		gBoard->show(getScreen());
 
 		//render finished set piece image if need
-		if(finished)
-		{
+		if(finished){
 			finishedSetPiece->show(getScreen());
 		}
 
 		//render namingPieceBG and piece name if needed
-		if(namingPiece)
-		{
-		    namePieceBG->show(getScreen());
-		    name->show(getScreen(), 415, 135);
+		if(namingPiece){
+		  namePieceBG->show(getScreen());
+		  name->show(getScreen(), 415, 135);
 		}
 
 		//render to the screen
 		//if rendering was unsuccessful
-		if(!render())
-		{
+		if(!render()){
 			//return 1, closing the program
 			return false;
 		}
@@ -692,66 +525,47 @@ bool Game::doSetPiece()
 
 	return true;
 }
-
 //*****************************************************
-bool Game::doPlayGame()
-{
+bool Game::doPlayGame(){
 	//pieces
-	Piece* selected = 0;
+	Piece* selected    = 0;
 	Piece* destination = 0;
-	Piece* winner = 0;
-	Piece* temp = 0;
+	Piece* winner      = 0;
+	Piece* temp        = 0;
 
 	//win or loss sprite
 	Sprite* gameResult = 0;
-
 	Sprite* man = new Sprite(5, 400);
 	man->load("lib/images/man.png", 255, 255, 255);
-
-    //object to display the piece name
-    StringInput pieceName;
-
+  //object to display the piece name
+  StringInput pieceName;
 	//loop, overlay, and firstFrame booleans
 	bool playingGame = true,
-		 showOverlay = false,
-		 firstFrame = true;
-
+       showOverlay = false,
+       firstFrame = true;
 	//coordinates for displaying piece name
 	int x,
 	    y;
-
 	//game winner, 0 - player, 1 - computer
 	int winningTeam = -1;
-
 	pieceName.setFont("lib/fonts/Therfont.ttf", 18);
-
 	//play in-game music after stopping any current playing music
 	gameSound->stopMusic();
 	//gameSound->playGameTheme();
 
-	while(playingGame)
-	{
+	while(playingGame){
 		//if it's player's turn and the game hasn't been won
-		if(getTurn() == 0 && winningTeam == -1)
-		{
-			while(SDL_PollEvent(&gEvent))
-			{
+		if(getTurn() == 0 && winningTeam == -1){
+			while(SDL_PollEvent(&gEvent)){
 				//if the user has exited the window
-				if(gEvent.type == SDL_QUIT)
-				{
+				if(gEvent.type == SDL_QUIT){
 					//set next state to exit
 					setState(STATE_EXIT);
-
 					playingGame = false;
-				}
-				//else if the user has hit the enter key
-				else if(gEvent.type == SDL_KEYDOWN)
-				{
-					if(gEvent.key.keysym.sym == SDLK_m)
-					{
+				}else if(gEvent.type == SDL_KEYDOWN){ // else if the user has hit the enter key
+					if(gEvent.key.keysym.sym == SDLK_m){
 						setState(STATE_MENU);
 						setPreviousState(STATE_MENU);
-
 						playingGame = false;
 					}
 				}
@@ -761,29 +575,21 @@ bool Game::doPlayGame()
 			}
 
 			//check for winning conditions in the first frame
-			if(firstFrame)
-			{
+			if(firstFrame){
 				//check to see if the game has been won by player
-				if(checkPlayerWins())
-				{
+				if(checkPlayerWins()){
 					//set winner to player
 					winningTeam = 0;
-
 					//set game result sprite to player wins
 					gameResult = playerWinsImage;
-
 					//play win theme music after stopping current music
 					gameSound->stopMusic();
 					gameSound->playWinTheme();
-				}
-				else if(checkComputerWins())
-				{
+				}else if(checkComputerWins()){
 					//set winner to computer
 					winningTeam = 1;
-
 					//set game result sprite to computer wins
 					gameResult = computerWinsImage;
-
 					//play lose theme music after stopping current music
 					gameSound->stopMusic();
 					gameSound->playLoseTheme();
@@ -793,43 +599,31 @@ bool Game::doPlayGame()
 			}
 
 			//if no piece has been selected
-			if(selected == 0 && destination == 0)
-			{
+			if(selected == 0 && destination == 0){
 				selected = gBoard->findSelectedPiece();
 
 				//if a piece was found
-				if(selected != 0)
-				{
+				if(selected != 0){
 					//if the piece is moveable
-					if(isMoveablePiece(selected, 0))
-					{
+					if(isMoveablePiece(selected, 0)){
 						//reset selected variable
 						selected->setIsSelected(false);
-
 						//set overlay to show
 						showOverlay = true;
-
 						//move overlay to this piece
 						pieceOverlay->setXPos(selected->getXPos());
 						pieceOverlay->setYPos(selected->getYPos());
 						x = selected->getXPos() + 2;
 						y = selected->getYPos() + 1;
-
 						pieceName.setMessageSurface(selected->getName());
-
 						//play selected piece sound effect
 						gameSound->playSelectPiece();
-					}
-					else
-					{
+					}else{
 						//reset selected
 						selected = 0;
 					}
 				}
-			}
-			//else if one piece has been selected
-			else if(destination == 0)
-			{
+			}else if(destination == 0){ // else if one piece has been selected
 				destination = gBoard->findSelectedPiece();
 
 				//if a piece was found and it isn't the same piece
@@ -840,84 +634,57 @@ bool Game::doPlayGame()
 				  selected->getBoardSpace() && destination->getRank() == 0))
 				{
 					//if the move is valid
-					if(isValidMove(selected, destination))
-					{
+					if(isValidMove(selected, destination)){
 						//move the piece
 						winner = selected->move(destination);
-
 						//play place-piece sound effect
 						gameSound->playPlacePiece();
 
 						//depending on the move outcome, remove defeated
 						//pieces from board's collection if needed and
 						//add emptyspace's where necessary
-						if(winner == 0)
-						{
+						if(winner == 0){
 							shiftPlayByPlayDown();
-							updatePlayByPlay(selected, destination, 0, -1);
-
+							updatePlayByPlay(selected, destination, gHuman, -1);
 							temp = findEmptySpacePiece();
-
 							gBoard->addPiece(temp);
-
 							gBoard->clearPiece(destination->getBoardSpace());
 							gBoard->clearPiece(selected->getBoardSpace());
 
 							//remove pieces from player and computer collections
-							if(selected->getOwner() == 0)
-							{
+							if(selected->getOwner() == 0){
 								gHuman->clearPiece(selected->getBoardSpace());
-							}
-							else
-							{
+							}else{
 								gComputer->clearPiece(selected->getBoardSpace());
 							}
 
-							if(destination->getOwner() == 0)
-							{
+							if(destination->getOwner() == 0){
 								gHuman->clearPiece(destination->getBoardSpace());
-							}
-							else
-							{
+							}else{
 								gComputer->clearPiece(destination->getBoardSpace());
 							}
 
 							swapLocation(temp, selected);
-
 							temp = findEmptySpacePiece();
-
 							gBoard->addPiece(temp);
-
 							swapLocation(temp, destination);
-
 							temp = 0;
-
 							//play battle sound effect
 							gameSound->playBattleSound();
-						}
-						else if(winner->getRank() == 0)
-						{
+						}else if(winner->getRank() == 0){
 							shiftPlayByPlayDown();
-							updatePlayByPlay(selected, destination, 0);
-						}
-						else if(winner->getBoardSpace() == destination->getBoardSpace())
-						{
+							updatePlayByPlay(selected, destination, gHuman);
+						}else if(winner->getBoardSpace() == destination->getBoardSpace()){
 							shiftPlayByPlayDown();
-							updatePlayByPlay(selected, destination, 0, 1);
-
+							updatePlayByPlay(selected, destination, gHuman, 1);
 							temp = findEmptySpacePiece();
-
 							gBoard->addPiece(temp);
-
 							gBoard->clearPiece(selected->getBoardSpace());
 
 							//remove pieces from player and computer collections
-							if(selected->getOwner() == 0)
-							{
+							if(selected->getOwner() == 0){
 								gHuman->clearPiece(selected->getBoardSpace());
-							}
-							else
-							{
+							}else{
 								gComputer->clearPiece(selected->getBoardSpace());
 							}
 
@@ -927,19 +694,14 @@ bool Game::doPlayGame()
 
 							//play battle sound effect or explosion if winner
 							//is a bomb
-							if(winner->getRank() == 11)
-							{
+							if(winner->getRank() == 11){
 								gameSound->playBombExplosion();
-							}
-							else
-							{
+							}else{
 								gameSound->playBattleSound();
 							}
-						}
-						else
-						{
+						}else{
 							shiftPlayByPlayDown();
-							updatePlayByPlay(selected, destination, 0, 0);
+							updatePlayByPlay(selected, destination, gHuman, 0);
 
 							temp = findEmptySpacePiece();
 
@@ -948,60 +710,45 @@ bool Game::doPlayGame()
 							gBoard->clearPiece(destination->getBoardSpace());
 
 							//remove pieces from player and computer collections
-							if(destination->getOwner() == 0)
-							{
+							if(destination->getOwner() == 0){
 								gHuman->clearPiece(destination->getBoardSpace());
-							}
-							else
-							{
+							}else{
 								gComputer->clearPiece(destination->getBoardSpace());
 							}
 
 							swapLocation(temp, destination);
-
 							temp = 0;
 
 							//play battle sound effect or explosion if winner
 							//is a bomb
-							if(winner->getRank() == 11)
-							{
+							if(winner->getRank() == 11){
 								gameSound->playBombExplosion();
-							}
-							else
-							{
+							}else{
 								gameSound->playBattleSound();
 							}
 						}
 
 						//check to see if the game has been won by player
-						if(checkPlayerWins())
-						{
+						if(checkPlayerWins()){
 							//set winner to player
 							winningTeam = 0;
-
 							//set game result sprite to player wins
 							gameResult = playerWinsImage;
-
 							//play win theme music after stopping current music
 							gameSound->stopMusic();
 							gameSound->playWinTheme();
-						}
-						else if(checkComputerWins())
-						{
+						}else if(checkComputerWins()){
 							//set winner to computer
 							winningTeam = 1;
-
 							//set game result sprite to computer wins
 							gameResult = computerWinsImage;
-
 							//play lose theme music after stopping current music
 							gameSound->stopMusic();
 							gameSound->playLoseTheme();
 						}
 
 						//if the game has not been won, set turn to computer's
-						if(winningTeam == -1)
-						{
+						if(winningTeam == -1){
 							setTurn(1);
 						}
 
@@ -1012,56 +759,40 @@ bool Game::doPlayGame()
 
 						//reset overlay
 						showOverlay = false;
-					}
-					else
-					{
+					}else{
 						//reset destination
 						destination = 0;
 					}
-				}
-				else if(destination != 0)
-				{
-					if(destination->getOwner() == selected->getOwner() && isMoveablePiece(destination, 0))
-					{
+				}else if(destination != 0){
+					if(destination->getOwner() == selected->getOwner() && isMoveablePiece(destination, 0)){
 						//set selected to destination, reset destination,
 						//and update piece overlay
 						selected = destination;
 						destination = 0;
-
 						pieceOverlay->setXPos(selected->getXPos());
 						pieceOverlay->setYPos(selected->getYPos());
 						x = selected->getXPos() + 2;
 						y = selected->getYPos() + 1;
-
 						pieceName.setMessageSurface(selected->getName());
-
 						//play selected piece sound effect
 						gameSound->playSelectPiece();
-					}
-					else
-					{
+					}else{
 						//reset destination
 						destination = 0;
 					}
 				}
 			}
-		}
-		//else if it's computer's turn and the game hasn't been won
-		else if(getTurn() == 1 && winningTeam == -1)
-		{
+		}else if(getTurn() == 1 && winningTeam == -1){ // else if it's computer's turn and the game hasn't been won
 			//do computer's turn
 			//delay two seconds to simulate computer thinking
 			SDL_Delay(2000);
-
 			//move play-by-play down
 			shiftPlayByPlayDown();
-
 			//move a piece of computer's
 			moveComputerPiece();
 
 			//check to see if the game has been won by player
-			if(checkPlayerWins())
-			{
+			if(checkPlayerWins()){
 				//set winner to player
 				winningTeam = 0;
 
@@ -1071,57 +802,40 @@ bool Game::doPlayGame()
 				//play win theme music after stopping current music
 				gameSound->stopMusic();
 				gameSound->playWinTheme();
-			}
-			else if(checkComputerWins())
-			{
+			}else if(checkComputerWins()){
 				//set winner to computer
 				winningTeam = 1;
-
 				//set game result sprite to computer wins
 				gameResult = computerWinsImage;
-
 				//play lose theme music after stopping current music
 				gameSound->stopMusic();
 				gameSound->playLoseTheme();
 			}
 
 			//set turn to player's
-			if(winningTeam == -1)
-			{
+			if(winningTeam == -1){
 				setTurn(0);
 			}
 		}
 
 		//if the game has been won
-		if(winningTeam != -1)
-		{			
-			while(SDL_PollEvent(&gEvent))
-			{
+		if(winningTeam != -1){
+			while(SDL_PollEvent(&gEvent)){
 				//if the user has exited the window
-				if(gEvent.type == SDL_QUIT)
-				{
+				if(gEvent.type == SDL_QUIT){
 					//set next state to exit
 					setState(STATE_EXIT);
-
 					playingGame = false;
-				}
-				//else if the user has hit the enter key
-				else if(gEvent.type == SDL_KEYDOWN)
-				{
-					if(gEvent.key.keysym.sym == SDLK_RETURN)
-					{						
+				}else if(gEvent.type == SDL_KEYDOWN){ // else if the user has hit the enter key
+					if(gEvent.key.keysym.sym == SDLK_RETURN){
 						setState(STATE_MENU);
 						setPreviousState(STATE_PLAYGAME);
-
 						//update player stats
 						gHuman->setGamesPlayed(1);
-
 						//save stats to file
 						gHuman->saveStatistics();
-
 						//stop current music
 						gameSound->stopMusic();
-
 						playingGame = false;
 					}
 				}
@@ -1129,21 +843,18 @@ bool Game::doPlayGame()
 		}
 
 		//apply the start menu image to the screen
-		playGameBG->show(getScreen());		
-
+		playGameBG->show(getScreen());
 		//show board
 		gBoard->show(getScreen());
 
 		//show piece overlay if needed
-		if(showOverlay)
-		{
+		if(showOverlay){
 			pieceOverlay->show(getScreen());
 			pieceName.show(getScreen(), x, y);
 		}
 
 		//show game result sprite if needed
-		if(winningTeam != -1)
-		{
+		if(winningTeam != -1){
 			gameResult->show(getScreen());
 		}
 
@@ -1160,15 +871,13 @@ bool Game::doPlayGame()
 		playByPlayEight->show(getScreen());
 		playByPlayNine->show(getScreen());
 
-		if(man != 0)
-		{
-            man->show(getScreen());
+		if(man != 0){
+      man->show(getScreen());
 		}
 
 		//render to the screen
 		//if rendering was unsuccessful
-		if(!render())
-		{
+		if(!render()){
 			//return 1, closing the program
 			return false;
 		}
@@ -1315,69 +1024,48 @@ void Game::startGame()
 {
 	//create player, computer, and board
 	gComputer = new Computer();
-	gBoard = new Board();
-
+	gBoard    = new Board();
 	//temporary piece for creation
 	Piece* temp = 0;
-
 	//piece coordinates
 	int x = 200,
-		y = 240;
+      y = 240;
 
 	//create emptyspace's and add to appropriate collections
-	for(int i = 0; i < 100; i++)
-	{
+	for(int i = 0; i < 100; i++){
 		//skip over no man's land
-		if(i == 42)
-		{
+		if(i == 42){
 			i = 44;
-		}
-		else if(i == 46)
-		{
+		}else if(i == 46){
 			i = 48;
-		}
-		else if(i == 52)
-		{
+		}else if(i == 52){
 			i = 54;
-		}
-		else if(i == 56)
-		{
+		}else if(i == 56){
 			i = 58;
 		}
 
 		//if 40 pieces have been created
-		if(i > 39)
-		{
+		if(i > 39){
 			temp = new EmptySpace(x, y, i);
-
 			//add to board's collection along with game's collection
 			gBoard->addPiece(temp);
 			addPiece(temp);
-
 			//update coordinates
 			x += 60;
 
-			if(x == 800)
-			{
+			if(x == 800){
 				x = 200;
 				y += 60;
 			}
 
 			//skip over no man's land
-			if((x == 320) && (y == 240))
-			{
+			if((x == 320) && (y == 240)){
 				x = 440;
-			}
-			else if((x == 560) && (y == 240))
-			{
+			}else if((x == 560) && (y == 240)){
 				x = 680;
-			}
-			else if((x == 320) && (y == 300))
-			{
+			}else if((x == 320) && (y == 300)){
 				x = 440;
-			}
-			else if((x == 560) && (y == 300))
-			{
+			}else if((x == 560) && (y == 300)){
 				x = 680;
 			}
 		}
@@ -1392,19 +1080,13 @@ void Game::startGame()
 	}
 
 	//create marshals and add to appropriate collections
-	for(int i = 0; i < 2; i++)
-	{
-		if(i == 0)
-		{
-			temp = new Marshal();
-
+	for(int i = 0; i < 2; i++){
+		if(i == 0){
+			temp = new Marshal(gHuman);
 			addPiece(temp);
 			gHuman->addPiece(temp);
-		}
-		else
-		{
-			temp = new Marshal("lib/images/cpiece.png");
-
+		}else{
+			temp = new Marshal(gComputer,"lib/images/cpiece.png");
 			addPiece(temp);
 			gComputer->addPiece(temp);
 			gBoard->addPiece(temp);
@@ -1416,14 +1098,14 @@ void Game::startGame()
 	{
 		if(i == 0)
 		{
-			temp = new General();
+			temp = new General(gHuman);
 
 			addPiece(temp);
 			gHuman->addPiece(temp);
 		}
 		else
 		{
-			temp = new General("lib/images/cpiece.png");
+			temp = new General(gComputer,"lib/images/cpiece.png");
 
 			addPiece(temp);
 			gComputer->addPiece(temp);
@@ -1436,14 +1118,14 @@ void Game::startGame()
 	{
 		if(i < 2)
 		{
-			temp = new Colonel();
+			temp = new Colonel(gHuman);
 
 			addPiece(temp);
 			gHuman->addPiece(temp);
 		}
 		else
 		{
-			temp = new Colonel("lib/images/cpiece.png");
+			temp = new Colonel(gComputer,"lib/images/cpiece.png");
 
 			addPiece(temp);
 			gComputer->addPiece(temp);
@@ -1456,14 +1138,14 @@ void Game::startGame()
 	{
 		if(i < 3)
 		{
-			temp = new Major();
+			temp = new Major(gHuman);
 
 			addPiece(temp);
 			gHuman->addPiece(temp);
 		}
 		else
 		{
-			temp = new Major("lib/images/cpiece.png");
+			temp = new Major(gComputer,"lib/images/cpiece.png");
 
 			addPiece(temp);
 			gComputer->addPiece(temp);
@@ -1476,14 +1158,14 @@ void Game::startGame()
 	{
 		if(i < 4)
 		{
-			temp = new Captain();
+			temp = new Captain(gHuman);
 
 			addPiece(temp);
 			gHuman->addPiece(temp);
 		}
 		else
 		{
-			temp = new Captain("lib/images/cpiece.png");
+			temp = new Captain(gComputer,"lib/images/cpiece.png");
 
 			addPiece(temp);
 			gComputer->addPiece(temp);
@@ -1496,14 +1178,14 @@ void Game::startGame()
 	{
 		if(i < 4)
 		{
-			temp = new Lieutenant();
+			temp = new Lieutenant(gHuman);
 
 			addPiece(temp);
 			gHuman->addPiece(temp);
 		}
 		else
 		{
-			temp = new Lieutenant("lib/images/cpiece.png");
+			temp = new Lieutenant(gComputer,"lib/images/cpiece.png");
 
 			addPiece(temp);
 			gComputer->addPiece(temp);
@@ -1516,14 +1198,14 @@ void Game::startGame()
 	{
 		if(i < 4)
 		{
-			temp = new Sergeant();
+			temp = new Sergeant(gHuman);
 
 			addPiece(temp);
 			gHuman->addPiece(temp);
 		}
 		else
 		{
-			temp = new Sergeant("lib/images/cpiece.png");
+			temp = new Sergeant(gComputer,"lib/images/cpiece.png");
 
 			addPiece(temp);
 			gComputer->addPiece(temp);
@@ -1536,14 +1218,14 @@ void Game::startGame()
 	{
 		if(i < 5)
 		{
-			temp = new Miner();
+			temp = new Miner(gHuman);
 
 			addPiece(temp);
 			gHuman->addPiece(temp);
 		}
 		else
 		{
-			temp = new Miner("lib/images/cpiece.png");
+			temp = new Miner(gComputer,"lib/images/cpiece.png");
 
 			addPiece(temp);
 			gComputer->addPiece(temp);
@@ -1556,14 +1238,14 @@ void Game::startGame()
 	{
 		if(i < 8)
 		{
-			temp = new Scout();
+			temp = new Scout(gHuman);
 
 			addPiece(temp);
 			gHuman->addPiece(temp);
 		}
 		else
 		{
-			temp = new Scout("lib/images/cpiece.png");
+			temp = new Scout(gComputer,"lib/images/cpiece.png");
 
 			addPiece(temp);
 			gComputer->addPiece(temp);
@@ -1576,14 +1258,14 @@ void Game::startGame()
 	{
 		if(i == 0)
 		{
-			temp = new Spy();
+			temp = new Spy(gHuman);
 
 			addPiece(temp);
 			gHuman->addPiece(temp);
 		}
 		else
 		{
-			temp = new Spy("lib/images/cpiece.png");
+			temp = new Spy(gComputer,"lib/images/cpiece.png");
 
 			addPiece(temp);
 			gComputer->addPiece(temp);
@@ -1596,14 +1278,14 @@ void Game::startGame()
 	{
 		if(i < 6)
 		{
-			temp = new Bomb();
+			temp = new Bomb(gHuman);
 
 			addPiece(temp);
 			gHuman->addPiece(temp);
 		}
 		else
 		{
-			temp = new Bomb("lib/images/cpiece.png");
+			temp = new Bomb(gComputer,"lib/images/cpiece.png");
 
 			addPiece(temp);
 			gComputer->addPiece(temp);
@@ -1616,14 +1298,14 @@ void Game::startGame()
 	{
 		if(i == 0)
 		{
-			temp = new Flag();
+			temp = new Flag(gHuman);
 
 			addPiece(temp);
 			gHuman->addPiece(temp);
 		}
 		else
 		{
-			temp = new Flag("lib/images/cpiece.png");
+			temp = new Flag(gComputer,"lib/images/cpiece.png");
 
 			addPiece(temp);
 			gComputer->addPiece(temp);
@@ -1666,44 +1348,34 @@ void Game::resetGame()
 }
 
 //*****************************************************
-bool Game::checkPlayerWins()
-{
+bool Game::checkPlayerWins(){
 	//flag exists and moveable piece exists booleans
 	bool flagExists = false,
-		 moveablePieceExists = false;
-
+       moveablePieceExists = false;
 	//counter
 	int j = 0;
-
 	//temporary piece
 	Piece* temp = 0;
-
 	//number of pieces computer has
 	int numPieces = gComputer->getNumPieces();
-
 	//check for existence of computer's flag
-	for(int i = 0; i < numPieces; i++)
-	{
+	for(int i = 0; i < numPieces; i++){
 		temp = gComputer->findPieceAtPosition(i);
 
-		if(temp->getRank() == 12)
-		{
+		if(temp->getRank() == 12){
 			flagExists = true;
 		}
 	}
 
 	//check for existence of moveable piece
-	while(!moveablePieceExists && j < numPieces)
-	{
+	while(!moveablePieceExists && j < numPieces){
 		temp = gComputer->findPieceAtPosition(j);
 
-		if(isMoveablePiece(temp, 1))
-		{
+		if(isMoveablePiece(temp, gComputer)){
 			moveablePieceExists = true;
 		}
 
-		if(!moveablePieceExists)
-		{
+		if(!moveablePieceExists){
 			j++;
 		}
 	}
@@ -1711,7 +1383,7 @@ bool Game::checkPlayerWins()
 	if(!flagExists || !moveablePieceExists)
 	{
 		gHuman->setGamesWon(1);
-		
+
 		if(!flagExists)
 		{
 			gHuman->setFlagsCaptured(1);
@@ -1720,7 +1392,7 @@ bool Game::checkPlayerWins()
 		{
 			gHuman->setGenocide(1);
 		}
-		
+
 		return true;
 	}
 	else
@@ -1728,83 +1400,56 @@ bool Game::checkPlayerWins()
 		return false;
 	}
 }
-
 //*****************************************************
-bool Game::checkComputerWins()
-{
+bool Game::checkComputerWins(){
 	//flag exists and moveable piece exists booleans
-	bool flagExists = false,
-		 moveablePieceExists = false;
-
+	bool flagExists          = false,
+       moveablePieceExists = false;
 	//counter
 	int j = 0;
-
 	//temporary piece
-	Piece* temp = 0;
-
+	Piece* tmpPiece = 0;
 	//number of pieces player has
 	int numPieces = gHuman->getNumPieces();
 
 	//check for existence of player's flag
-	for(int i = 0; i < numPieces; i++)
-	{
-		temp = gHuman->findPieceAtPosition(i);
+	for(int i = 0; i < numPieces; i++){
+		tmpPiece = gHuman->findPieceAtPosition(i);
 
-		if(temp->getRank() == 12)
-		{
+		if(tmpPiece->getRank() == 12){
 			flagExists = true;
 		}
 	}
 
 	//check for existence of moveable piece
-	while(!moveablePieceExists && j < numPieces)
-	{
-		temp = gHuman->findPieceAtPosition(j);
-
-		if(isMoveablePiece(temp, 0))
-		{
-			moveablePieceExists = true;
-		}
-
-		if(!moveablePieceExists)
-		{
-			j++;
-		}
+	while(!moveablePieceExists && j < numPieces){
+		tmpPiece = gHuman->findPieceAtPosition(j);
+		if(isMoveablePiece(tmpPiece, gHuman)){ moveablePieceExists = true; }
+		if(!moveablePieceExists){ j++; }
 	}
 
-	if(!flagExists || !moveablePieceExists)
-	{
+	if(!flagExists || !moveablePieceExists){
 		gHuman->setGamesLost(1);
 
-		if(!flagExists)
-		{
+		if(!flagExists){
 			gHuman->setCapturedFlags(1);
-		}
-		else
-		{
+		}else{
 			gHuman->setTimesExtinct(1);
 		}
-		
+
 		return true;
-	}
-	else
-	{
+	}else{
 		return false;
 	}
 }
-
 //*****************************************************
-void Game::addPiece(Piece* const piece)
-{
-	if(piece != 0)
-	{
+void Game::addPiece(Piece* const piece){
+	if(piece != 0){
 		pieces.push_back(piece);
 	}
 }
-
 //*****************************************************
-Piece* Game::findEmptySpacePiece()
-{
+Piece* Game::findEmptySpacePiece(){
 	//temp piece
 	Piece* temp = 0;
 
@@ -1858,8 +1503,7 @@ void Game::swapLocation(Piece* const first, Piece* const second) const
 }
 
 //*****************************************************
-bool Game::isMoveablePiece(Piece* const selected, const int mover) const
-{
+bool Game::isMoveablePiece(Piece* const selected, const Player* mover) const{
 	return gBoard->isMoveablePiece(selected, mover);
 }
 
@@ -1976,20 +1620,16 @@ void Game::moveComputerPiece()
 	iter = numbers.begin();
 
 	//find moveable piece
-	while(isFindingPiece)
-	{
+	while(isFindingPiece){
 		selected = gComputer->findPieceAtPosition(*iter);
 
-		if(isMoveablePiece(selected, 1))
-		{
+		if(isMoveablePiece(selected, gComputer)){
 			isFindingPiece = false;
-
 			//play select-piece sound effect
 			gameSound->playSelectPiece();
 		}
 
-		if(isFindingPiece)
-		{
+		if(isFindingPiece){
 			iter++;
 		}
 	}
@@ -2030,7 +1670,7 @@ void Game::moveComputerPiece()
 	//if needed and add emptyspace's where necessary
 	if(winner == 0)
 	{
-		updatePlayByPlay(selected, destination, 1, -1);
+		updatePlayByPlay(selected, destination, gComputer, -1);
 
 		temp = findEmptySpacePiece();
 
@@ -2077,7 +1717,7 @@ void Game::moveComputerPiece()
 	}
 	else if(winner->getBoardSpace() == destination->getBoardSpace())
 	{
-		updatePlayByPlay(selected, destination, 1, 0);
+		updatePlayByPlay(selected, destination, gComputer, 0);
 
 		temp = findEmptySpacePiece();
 
@@ -2112,7 +1752,7 @@ void Game::moveComputerPiece()
 	}
 	else
 	{
-		updatePlayByPlay(selected, destination, 1, 1);
+		updatePlayByPlay(selected, destination, gComputer, 1);
 
 		temp = findEmptySpacePiece();
 
@@ -2146,9 +1786,8 @@ void Game::moveComputerPiece()
 		}
 	}
 }
-
 //*****************************************************
-void Game::updatePlayByPlay(Piece* const first, Piece* const second, const int mover, const int winner) const{
+void Game::updatePlayByPlay(Piece* const first, Piece* const second, const Player* mover, const int winner) const{
 	//play-by-play stringstream
 	std::stringstream ss;
 	//font for play-by-play
@@ -2159,50 +1798,50 @@ void Game::updatePlayByPlay(Piece* const first, Piece* const second, const int m
 	SDL_Color textColor = {0, 0, 0};
 
 	//if player moved
-	if(mover == 0){
+	if(mover->getType() == 0){
 		ss << "Player's ";
 
 		switch(first->getRank()){
-		//marshal
-		case 10:
-			ss << "Marshal(";
-			break;
-		//general
-		case 9:
-			ss << "General(";
-			break;
-		//colonel
-		case 8:
-			ss << "Colonel(";
-			break;
-		//major
-		case 7:
-			ss << "Major(";
-			break;
-		//captain
-		case 6:
-			ss << "Captain(";
-			break;
-		//lieutenant
-		case 5:
-			ss << "Lieutenant(";
-			break;
-		//sergeant
-		case 4:
-			ss << "Sergeant(";
-			break;
-		//miner
-		case 3:
-			ss << "Miner(";
-			break;
-		//scout
-		case 2:
-			ss << "Scout(";
-			break;
-		//spy
-		case 1:
-			ss << "Spy(";
-			break;
+      //marshal
+      case 10:
+        ss << "Marshal(";
+      break;
+      //general
+      case 9:
+        ss << "General(";
+      break;
+      //colonel
+      case 8:
+        ss << "Colonel(";
+      break;
+      //major
+      case 7:
+        ss << "Major(";
+      break;
+      //captain
+      case 6:
+        ss << "Captain(";
+      break;
+      //lieutenant
+      case 5:
+        ss << "Lieutenant(";
+      break;
+      //sergeant
+      case 4:
+        ss << "Sergeant(";
+      break;
+      //miner
+      case 3:
+        ss << "Miner(";
+      break;
+      //scout
+      case 2:
+        ss << "Scout(";
+      break;
+      //spy
+      case 1:
+        ss << "Spy(";
+      break;
 		}
 
 		if(winner == 0){
@@ -2246,54 +1885,54 @@ void Game::updatePlayByPlay(Piece* const first, Piece* const second, const int m
 		ss << "Gary's ";
 
 		switch(second->getRank()){
-		//flag
-		case 12:
-			ss << "Flag(";
-			break;
-		//bomb
-		case 11:
-			ss << "Bomb(";
-			break;
-		//marshal
-		case 10:
-			ss << "Marshal(";
-			break;
-		//general
-		case 9:
-			ss << "General(";
-			break;
-		//colonel
-		case 8:
-			ss << "Colonel(";
-			break;
-		//major
-		case 7:
-			ss << "Major(";
-			break;
-		//captain
-		case 6:
-			ss << "Captain(";
-			break;
-		//lieutenant
-		case 5:
-			ss << "Lieutenant(";
-			break;
-		//sergeant
-		case 4:
-			ss << "Sergeant(";
-			break;
-		//miner
-		case 3:
-			ss << "Miner(";
-			break;
-		//scout
-		case 2:
-			ss << "Scout(";
-			break;
-		//spy
-		case 1:
-			ss << "Spy(";
-			break;
+      //flag
+      case 12:
+        ss << "Flag(";
+      break;
+      //bomb
+      case 11:
+        ss << "Bomb(";
+      break;
+      //marshal
+      case 10:
+        ss << "Marshal(";
+      break;
+      //general
+      case 9:
+        ss << "General(";
+      break;
+      //colonel
+      case 8:
+        ss << "Colonel(";
+      break;
+      //major
+      case 7:
+        ss << "Major(";
+      break;
+      //captain
+      case 6:
+        ss << "Captain(";
+      break;
+      //lieutenant
+      case 5:
+        ss << "Lieutenant(";
+      break;
+      //sergeant
+      case 4:
+        ss << "Sergeant(";
+      break;
+      //miner
+      case 3:
+        ss << "Miner(";
+      break;
+      //scout
+      case 2:
+        ss << "Scout(";
+      break;
+      //spy
+      case 1:
+        ss << "Spy(";
+      break;
 		}
 
 		if(winner == 0){
@@ -2311,46 +1950,46 @@ void Game::updatePlayByPlay(Piece* const first, Piece* const second, const int m
 		ss << "Gary's ";
 
 		switch(first->getRank()){
-		//marshal
-		case 10:
-			ss << "Marshal(";
-			break;
-		//general
-		case 9:
-			ss << "General(";
-			break;
-		//colonel
-		case 8:
-			ss << "Colonel(";
-			break;
-		//major
-		case 7:
-			ss << "Major(";
-			break;
-		//captain
-		case 6:
-			ss << "Captain(";
-			break;
-		//lieutenant
-		case 5:
-			ss << "Lieutenant(";
-			break;
-		//sergeant
-		case 4:
-			ss << "Sergeant(";
-			break;
-		//miner
-		case 3:
-			ss << "Miner(";
-			break;
-		//scout
-		case 2:
-			ss << "Scout(";
-			break;
-		//spy
-		case 1:
-			ss << "Spy(";
-			break;
+      //marshal
+      case 10:
+        ss << "Marshal(";
+      break;
+      //general
+      case 9:
+        ss << "General(";
+      break;
+      //colonel
+      case 8:
+        ss << "Colonel(";
+      break;
+      //major
+      case 7:
+        ss << "Major(";
+      break;
+      //captain
+      case 6:
+        ss << "Captain(";
+      break;
+      //lieutenant
+      case 5:
+        ss << "Lieutenant(";
+      break;
+      //sergeant
+      case 4:
+        ss << "Sergeant(";
+      break;
+      //miner
+      case 3:
+        ss << "Miner(";
+      break;
+      //scout
+      case 2:
+        ss << "Scout(";
+      break;
+      //spy
+      case 1:
+        ss << "Spy(";
+      break;
 		}
 
 		if(winner == 1){
@@ -2395,54 +2034,54 @@ void Game::updatePlayByPlay(Piece* const first, Piece* const second, const int m
 		ss << "Player's ";
 
 		switch(second->getRank()){
-		//flag
-		case 12:
-			ss << "Flag(";
-			break;
-		//bomb
-		case 11:
-			ss << "Bomb(";
-			break;
-		//marshal
-		case 10:
-			ss << "Marshal(";
-			break;
-		//general
-		case 9:
-			ss << "General(";
-			break;
-		//colonel
-		case 8:
-			ss << "Colonel(";
-			break;
-		//major
-		case 7:
-			ss << "Major(";
-			break;
-		//captain
-		case 6:
-			ss << "Captain(";
-			break;
-		//lieutenant
-		case 5:
-			ss << "Lieutenant(";
-			break;
-		//sergeant
-		case 4:
-			ss << "Sergeant(";
-			break;
-		//miner
-		case 3:
-			ss << "Miner(";
-			break;
-		//scout
-		case 2:
-			ss << "Scout(";
-			break;
-		//spy
-		case 1:
-			ss << "Spy(";
-			break;
+      //flag
+      case 12:
+        ss << "Flag(";
+      break;
+      //bomb
+      case 11:
+        ss << "Bomb(";
+      break;
+      //marshal
+      case 10:
+        ss << "Marshal(";
+      break;
+      //general
+      case 9:
+        ss << "General(";
+      break;
+      //colonel
+      case 8:
+        ss << "Colonel(";
+      break;
+      //major
+      case 7:
+        ss << "Major(";
+      break;
+      //captain
+      case 6:
+        ss << "Captain(";
+      break;
+      //lieutenant
+      case 5:
+        ss << "Lieutenant(";
+      break;
+      //sergeant
+      case 4:
+        ss << "Sergeant(";
+      break;
+      //miner
+      case 3:
+        ss << "Miner(";
+      break;
+      //scout
+      case 2:
+        ss << "Scout(";
+      break;
+      //spy
+      case 1:
+        ss << "Spy(";
+      break;
 		}
 
 		if(winner == 1){
@@ -2460,111 +2099,91 @@ void Game::updatePlayByPlay(Piece* const first, Piece* const second, const int m
 }
 
 //*****************************************************
-void Game::updatePlayByPlay(Piece* const moved, Piece* const destination, const int mover) const
-{
+void Game::updatePlayByPlay(Piece* const moved, Piece* const destination, const Player* mover) const{
 	//play-by-play stringstream
 	std::stringstream ss;
-
 	//font for play-by-play
 	TTF_Font* font = TTF_OpenFont("lib/fonts/Therfont.ttf", 18);
-
 	//SDL surface for new playByPlay message
 	SDL_Surface* newMessage = 0;
-
 	//text color
 	SDL_Color textColor = {0, 0, 0};
 
-	if(mover == 0)
-	{
+	if(mover->getType() == 0){
 		ss << "Player moves a ";
-	}
-	else
-	{
+	}else{
 		ss << "Gary moves a ";
 	}
 
 	//update play-by-play and clear stringstream
 	//create new playByPlay image
 	newMessage = TTF_RenderText_Solid(font, ss.str().c_str(), textColor);
-
 	//update playByPlay image
 	playByPlayOne->setSurfaceNoFree(newMessage);
-
 	ss.str("");
 
-	if(mover == 0 || mover == 1)
-	{
-		switch(moved->getRank())
-		{
-		//marshal
-		case 10:
-			ss << "Marshal(" << destination->getBoardSpace() << ")";
-			break;
-		//general
-		case 9:
-			ss << "General(" << destination->getBoardSpace() << ")";
-			break;
-		//colonel
-		case 8:
-			ss << "Colonel(" << destination->getBoardSpace() << ")";
-			break;
-		//major
-		case 7:
-			ss << "Major(" << destination->getBoardSpace() << ")";
-			break;
-		//captain
-		case 6:
-			ss << "Captain(" << destination->getBoardSpace() << ")";
-			break;
-		//lieutenant
-		case 5:
-			ss << "Lieutenant(" << destination->getBoardSpace() << ")";
-			break;
-		//sergeant
-		case 4:
-			ss << "Sergeant(" << destination->getBoardSpace() << ")";
-			break;
-		//miner
-		case 3:
-			ss << "Miner(" << destination->getBoardSpace() << ")";
-			break;
-		//scout
-		case 2:
-			ss << "Scout(" << destination->getBoardSpace() << ")";
-			break;
-		//spy
-		case 1:
-			ss << "Spy(" << destination->getBoardSpace() << ")";
-			break;
+	if(mover->getType() == 0 || mover->getType() == 1){
+		switch(moved->getRank()){
+      //marshal
+      case 10:
+        ss << "Marshal(" << destination->getBoardSpace() << ")";
+      break;
+      //general
+      case 9:
+        ss << "General(" << destination->getBoardSpace() << ")";
+      break;
+      //colonel
+      case 8:
+        ss << "Colonel(" << destination->getBoardSpace() << ")";
+      break;
+      //major
+      case 7:
+        ss << "Major(" << destination->getBoardSpace() << ")";
+      break;
+      //captain
+      case 6:
+        ss << "Captain(" << destination->getBoardSpace() << ")";
+      break;
+      //lieutenant
+      case 5:
+        ss << "Lieutenant(" << destination->getBoardSpace() << ")";
+      break;
+      //sergeant
+      case 4:
+        ss << "Sergeant(" << destination->getBoardSpace() << ")";
+      break;
+      //miner
+      case 3:
+        ss << "Miner(" << destination->getBoardSpace() << ")";
+      break;
+      //scout
+      case 2:
+        ss << "Scout(" << destination->getBoardSpace() << ")";
+      break;
+      //spy
+      case 1:
+        ss << "Spy(" << destination->getBoardSpace() << ")";
+      break;
 		}
-	}
-	else
-	{
+	}else{
 		ss << " ";
 	}
 
 	//update play-by-play and clear stringstream
 	//create new playByPlay image
 	newMessage = TTF_RenderText_Solid(font, ss.str().c_str(), textColor);
-
 	//update playByPlay image
 	playByPlayTwo->setSurfaceNoFree(newMessage);
-
 	ss.str("");
-
 	ss << "to board space " << moved->getBoardSpace() << ".";
-
 	//update play-by-play and clear stringstream
 	//create new playByPlay image
 	newMessage = TTF_RenderText_Solid(font, ss.str().c_str(), textColor);
-
 	//update playByPlay image
 	playByPlayThree->setSurfaceNoFree(newMessage);
 }
-
 //*****************************************************
-void Game::updateComputerPlayByPlay(Piece* const moved, Piece* const destination) const
-{
+void Game::updateComputerPlayByPlay(Piece* const moved, Piece* const destination) const{
 	//play-by-play stringstream
 	std::stringstream ss;
 

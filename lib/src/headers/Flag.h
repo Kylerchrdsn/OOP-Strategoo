@@ -8,15 +8,15 @@
 
 #include "Piece.h"
 
-class Flag : public Piece
-{
-public:
-	//constructors
-	Flag(int xPos = 0, int yPos = 0, int boardSpace = -1);
-	Flag(std::string filename);
+class Flag : public Piece{
+  public:
+    //constructors
+    Flag(Player* owner, int xPos = 0, int yPos = 0, int boardSpace = -1);
+    Flag(Player* owner, std::string filename);
 
-	//move
-	virtual Piece* move(Piece* const destination); 
+    //move
+    virtual Piece* move(Piece* const destination);
+  //end public
 };
 
 #endif

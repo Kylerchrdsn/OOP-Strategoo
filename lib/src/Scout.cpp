@@ -1,20 +1,20 @@
 /******************************************************
 	Scout.cpp
 
-	This is the implementation file for the Scout 
+	This is the implementation file for the Scout
 	class.
 ******************************************************/
 
 #include "headers/Scout.h"
 
-Scout::Scout(int xPos, int yPos, int boardSpace) : Piece(xPos, yPos, "lib/images/scout.png", 0)
+Scout::Scout(Player* owner, int xPos, int yPos, int boardSpace) : Piece(owner, xPos, yPos, "lib/images/scout.png")
 {
 	setBoardSpace(boardSpace);
 	setRank(2);
 }
 
 //*****************************************************
-Scout::Scout(std::string filename) : Piece(0, 0, filename.c_str(), 1)
+Scout::Scout(Player* owner, std::string filename) : Piece(owner, 0, 0, filename.c_str())
 {
 	setBoardSpace(-1);
 	setRank(2);

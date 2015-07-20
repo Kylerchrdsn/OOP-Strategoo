@@ -6,23 +6,15 @@
 ******************************************************/
 #include "headers/Bomb.h"
 
-Bomb::Bomb(int xPos, int yPos, int boardSpace) : Piece(xPos, yPos, "lib/images/bomb.png", 0)
-{
+Bomb::Bomb(Player* owner, int xPos, int yPos, int boardSpace) : Piece(owner, xPos, yPos, "lib/images/bomb.png"){
 	setBoardSpace(boardSpace);
 	setRank(11);
 }
-
 //*****************************************************
-Bomb::Bomb(std::string filename) : Piece(0, 0, filename.c_str(), 1)
-{
+Bomb::Bomb(Player* owner, std::string filename) : Piece(owner, 0, 0, filename.c_str()){
 	setBoardSpace(-1);
 	setRank(11);
 }
-
+//bombs can't move!!!!!111111oneoneone
 //*****************************************************
-Piece* Bomb::move(Piece* const destination)
-{
-	//bombs can't move!!!!!111111oneoneone
-
-	return 0;
-}
+Piece* Bomb::move(Piece* const destination){ return 0; }

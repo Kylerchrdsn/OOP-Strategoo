@@ -11,8 +11,7 @@
 #include "Piece.h"
 #include "Player.h"
 
-class Computer : public Player
-{
+class Computer : public Player{
   public:
     //constructor and destructor
     Computer();
@@ -28,7 +27,7 @@ class Computer : public Player
 
   private:
     //collection of pieces
-      std::vector<Piece*> pieces;
+    std::vector<Piece*> pieces;
   //end private
 };
 //*****************************************************

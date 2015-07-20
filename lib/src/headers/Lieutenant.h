@@ -12,8 +12,8 @@ class Lieutenant : public Piece
 {
 public:
 	//constructors
-    Lieutenant(int xPos = 0, int yPos = 0, int boardSpace = -1);
-	Lieutenant(std::string filename);
+    Lieutenant(Player* owner, int xPos = 0, int yPos = 0, int boardSpace = -1);
+	Lieutenant(Player* owner, std::string filename);
 
 	//move
 	virtual Piece* move(Piece* const destination);

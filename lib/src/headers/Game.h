@@ -87,17 +87,14 @@ public:
 	//piece functions
 	Piece* findEmptySpacePiece();
 	void swapLocation(Piece* const first, Piece* const second) const;
-	bool isMoveablePiece(Piece* const selected, const int mover) const;
+	bool isMoveablePiece(Piece* const selected, const Player* mover) const;
 	bool isValidMove(Piece* const selected, Piece* const destination) const;
 	void moveComputerPiece();
 
 	//play-by-play
-	void updatePlayByPlay(Piece* const first, Piece* const sencond, 
-						  const int mover, const int winner) const;
-	void updatePlayByPlay(Piece* const moved, Piece* const destination, 
-		                  const int mover) const;
-	void updateComputerPlayByPlay(Piece* const moved, 
-		                          Piece* const destination) const;
+	void updatePlayByPlay(Piece* const first, Piece* const sencond, const Player* mover, const int winner) const;
+	void updatePlayByPlay(Piece* const moved, Piece* const destination, const Player* mover) const;
+	void updateComputerPlayByPlay(Piece* const moved, Piece* const destination) const;
 	void shiftPlayByPlayDown() const;
 	void resetPlayByPlay() const;
 

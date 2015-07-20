@@ -8,12 +8,13 @@
 
 #include <string>
 #include "Sprite.h"
+#include "Player.h"
 
 class Piece{
   public:
     // Constructors //
-    Piece(const int x = 0, const int y = 0, const int owner = 0);
-    Piece(const int x, const int y, const std::string& filename, const int owner);
+    Piece(Player* owner, const int x = 0, const int y = 0);
+    Piece(Player* owner, const int x, const int y, const std::string& filename);
     // Destructor //
     virtual ~Piece();
     // Getters and setters //
@@ -27,8 +28,8 @@ class Piece{
     void               setBoardSpace(const int boardSpace);
     inline bool        getIsSelected() const;
     inline void        setIsSelected(const bool selected);
-    inline int         getOwner() const;
-    void               setOwner(const int owner);
+    Player*            getOwner() const;
+    void               setOwner(Player* owner);
     inline std::string getName() const;
     inline void        setName(const std::string& name);
     // Piece functions //
@@ -49,8 +50,8 @@ class Piece{
     Sprite* pieceImage;
     // Boardspace, rank, and owner //
     int boardSpace_,
-        rank_,
-        owner_; // 0 for player, 1 for computer, -1 for emptyspace
+        rank_;
+    Player* owner_; // 0 for player, 1 for computer, -1 for emptyspace
     // isSelected boolean //
     bool isSelected;
     // Name //
@@ -74,7 +75,7 @@ inline bool Piece::getIsSelected() const{ return isSelected; }
 //*****************************************************
 inline void Piece::setIsSelected(const bool selected){ isSelected = selected; }
 //*****************************************************
-inline int Piece::getOwner() const{ return owner_; }
+inline Player* Piece::getOwner() const{ return owner_; }
 //*****************************************************
 inline std::string Piece::getName() const{ return name_; }
 //*****************************************************

@@ -4,22 +4,18 @@
 	This is the implementation file for the Captain
 	class.
 ******************************************************/
-
 #include "headers/Captain.h"
 
-Captain::Captain(int xPos, int yPos, int boardSpace) : Piece(xPos, yPos, "lib/images/captain.png", 0)
-{
+Captain::Captain(Player* owner, int xPos, int yPos, int boardSpace) : Piece(owner, xPos, yPos, "lib/images/captain.png"){
 	setBoardSpace(boardSpace);
 	setRank(6);
 }
-
 //*****************************************************
-Captain::Captain(std::string filename) : Piece(0, 0, filename.c_str(), 1)
+Captain::Captain(Player* owner, std::string filename) : Piece(owner, 0, 0, filename.c_str())
 {
 	setBoardSpace(-1);
 	setRank(6);
 }
-
 //*****************************************************
 Piece* Captain::move(Piece* const destination)
 {

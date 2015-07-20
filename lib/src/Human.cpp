@@ -7,12 +7,12 @@
 #include "headers/Human.h"
 
 //*****************************************************
-Human::Human(){
+Human::Human() : Player(0){
 	setName(" ");
 	stats = new Statistics();
 }
 //*****************************************************
-Human::Human(std::string& currentPlayer){
+Human::Human(std::string& currentPlayer) : Player(0){
 	setName(currentPlayer);
 	stats = new Statistics();
 	stats->load(currentPlayer);

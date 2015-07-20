@@ -1,59 +1,40 @@
 /******************************************************
 	Colonel.cpp
 
-	This is the implementation file for the Colonel 
+	This is the implementation file for the Colonel
 	class.
 ******************************************************/
-
 #include "headers/Colonel.h"
 
-Colonel::Colonel(int xPos, int yPos, int boardSpace) : Piece(xPos, yPos, "lib/images/colonel.png", 0)
-{
+//*****************************************************
+Colonel::Colonel(Player* owner, int xPos, int yPos, int boardSpace) : Piece(owner, xPos, yPos, "lib/images/colonel.png"){
 	setBoardSpace(boardSpace);
 	setRank(8);
 }
-
 //*****************************************************
-Colonel::Colonel(std::string filename) : Piece(0, 0, filename.c_str(), 1)
-{
+Colonel::Colonel(Player* owner, std::string filename) : Piece(owner, 0, 0, filename.c_str()){
 	setBoardSpace(-1);
 	setRank(8);
 }
-
 //*****************************************************
-Piece* Colonel::move(Piece* const destination)
-{
+Piece* Colonel::move(Piece* const destination){
 	//if the piece is an emptyspace
-	if(destination->getRank() == 0)
-	{
+	if(destination->getRank() == 0){
 		swapLocation(destination);
-
 		return destination;
-	}
-	//else if the piece is the flag
-	else if(destination->getRank() == 12)
-	{
+	}else if(destination->getRank() == 12){ //else if the piece is the flag
 		swapLocation(destination);
-
 		return this;
-	}
-	//else need to battle pieces to the death
-	else
-	{
-		if(*this > *destination)
-		{
+	}else{ //else need to battle pieces to the death
+		if(*this > *destination){
 			swapLocation(destination);
-
 			return this;
-		}
-		else if(*this < *destination)
-		{
+		}else if(*this < *destination){
 			return destination;
-		}
-		else
-		{
+		}else{
 			//draw
 			return 0;
 		}
 	}
 }
+

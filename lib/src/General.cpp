@@ -4,25 +4,20 @@
 	This is the implementation file for the General 
 	class.
 ******************************************************/
-
 #include "headers/General.h"
 
-General::General(int xPos, int yPos, int boardSpace) : Piece(xPos, yPos, "lib/images/general.png", 0)
-{
+//*****************************************************
+General::General(Player* owner, int xPos, int yPos, int boardSpace) : Piece(owner, xPos, yPos, "lib/images/general.png"){
 	setBoardSpace(boardSpace);
 	setRank(9);
 }
-
 //*****************************************************
-General::General(std::string filename) : Piece(0, 0, filename.c_str(), 1)
-{
+General::General(Player* owner, std::string filename) : Piece(owner, 0, 0, filename.c_str()){
 	setBoardSpace(-1);
 	setRank(9);
 }
-
 //*****************************************************
-Piece* General::move(Piece* const destination)
-{
+Piece* General::move(Piece* const destination){
 	//if the piece is an emptyspace
 	if(destination->getRank() == 0)
 	{

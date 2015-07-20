@@ -4,65 +4,43 @@
 	This is the implementation file for the Piece
 	class.
 ******************************************************/
-
 #include "headers/Piece.h"
 
-Piece::Piece(const int x, const int y, const int owner)
-{
+//*****************************************************
+Piece::Piece(Player* owner, const int x, const int y){
 	pieceImage = new Sprite(x, y);
-
 	setOwner(owner);
 	setIsSelected(false);
 	name_ = "john doe";
 }
-
 //*****************************************************
-Piece::Piece(const int x, const int y, const std::string& filename, 
-	         const int owner)
-{
+Piece::Piece(Player* owner, const int x, const int y, const std::string& filename){
 	pieceImage = new Sprite(x, y, filename.c_str());
-
 	setOwner(owner);
 	setIsSelected(false);
 }
-
 //*****************************************************
-Piece::~Piece()
-{
-	delete pieceImage;
-}
-
+Piece::~Piece(){ delete pieceImage; }
 //*****************************************************
-void Piece::setRank(const int rank)
-{
-	if(rank > -1 && rank < 13)
-	{
+void Piece::setRank(const int rank){
+	if(rank > -1 && rank < 13){
 		rank_ = rank;
 	}
 }
-
 //*****************************************************
-void Piece::setBoardSpace(const int boardSpace)
-{
+void Piece::setBoardSpace(const int boardSpace){
 	if(boardSpace > -2 && boardSpace < 100 &&
 	   boardSpace != 42 && boardSpace != 43 &&
 	   boardSpace != 46 && boardSpace != 47 &&
 	   boardSpace != 52 && boardSpace != 53 &&
-	   boardSpace != 56 && boardSpace != 57)
-	{
+	   boardSpace != 56 && boardSpace != 57){
 		boardSpace_ = boardSpace;
 	}
 }
-
 //*****************************************************
-void Piece::setOwner(const int owner)
-{
-	if(owner == 0 || owner == 1)
-	{
-		owner_ = owner;
-	}
+void Piece::setOwner(Player* owner){
+  owner_ = owner;
 }
-
 //*****************************************************
 void Piece::swapLocation(Piece* const other)
 {
@@ -86,7 +64,6 @@ void Piece::swapLocation(Piece* const other)
 	other->setYPos(y);
 	other->setBoardSpace(boardSpace);
 }
-
 //*****************************************************
 void Piece::handleInput(SDL_Event& gEvent)
 {
@@ -114,3 +91,4 @@ void Piece::handleInput(SDL_Event& gEvent)
 		}
 	}
 }
+

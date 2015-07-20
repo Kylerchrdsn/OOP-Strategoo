@@ -7,14 +7,14 @@
 
 #include "headers/Lieutenant.h"
 
-Lieutenant::Lieutenant(int xPos, int yPos, int boardSpace) : Piece(xPos, yPos, "lib/images/lieutenant.png", 0)
+Lieutenant::Lieutenant(Player* owner, int xPos, int yPos, int boardSpace) : Piece(owner, xPos, yPos, "lib/images/lieutenant.png")
 {
 	setBoardSpace(boardSpace);
 	setRank(5);
 }
 
 //*****************************************************
-Lieutenant::Lieutenant(std::string filename) : Piece(0, 0, filename.c_str(), 1)
+Lieutenant::Lieutenant(Player* owner, std::string filename) : Piece(owner, 0, 0, filename.c_str())
 {
 	setBoardSpace(-1);
 	setRank(5);

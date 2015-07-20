@@ -7,14 +7,14 @@
 
 #include "headers/Spy.h"
 
-Spy::Spy(int xPos, int yPos, int boardSpace) : Piece(xPos, yPos, "lib/images/spy.png", 0)
+Spy::Spy(Player* owner, int xPos, int yPos, int boardSpace) : Piece(owner, xPos, yPos, "lib/images/spy.png")
 {
 	setBoardSpace(boardSpace);
 	setRank(1);
 }
 
 //*****************************************************
-Spy::Spy(std::string filename) : Piece(0, 0, filename.c_str(), 1)
+Spy::Spy(Player* owner, std::string filename) : Piece(owner, 0, 0, filename.c_str())
 {
 	setBoardSpace(-1);
 	setRank(1);

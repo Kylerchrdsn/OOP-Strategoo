@@ -1,20 +1,20 @@
 /******************************************************
 	Sergeant.cpp
 
-	This is the implementation file for the Sergeant 
+	This is the implementation file for the Sergeant
 	class.
 ******************************************************/
 
 #include "headers/Sergeant.h"
 
-Sergeant::Sergeant(int xPos, int yPos, int boardSpace) : Piece(xPos, yPos, "lib/images/sergeant.png", 0)
+Sergeant::Sergeant(Player* owner, int xPos, int yPos, int boardSpace) : Piece(owner, xPos, yPos, "lib/images/sergeant.png")
 {
 	setBoardSpace(boardSpace);
 	setRank(4);
 }
 
 //*****************************************************
-Sergeant::Sergeant(std::string filename) : Piece(0, 0, filename.c_str(), 1)
+Sergeant::Sergeant(Player* owner, std::string filename) : Piece(owner, 0, 0, filename.c_str())
 {
 	setBoardSpace(-1);
 	setRank(4);

@@ -7,14 +7,14 @@
 
 #include "headers/Miner.h"
 
-Miner::Miner(int xPos, int yPos, int boardSpace) : Piece(xPos, yPos, "lib/images/miner.png", 0)
+Miner::Miner(Player* owner, int xPos, int yPos, int boardSpace) : Piece(owner, xPos, yPos, "lib/images/miner.png")
 {
 	setBoardSpace(boardSpace);
 	setRank(3);
 }
 
 //*****************************************************
-Miner::Miner(std::string filename) : Piece(0, 0, filename.c_str(), 1)
+Miner::Miner(Player* owner, std::string filename) : Piece(owner, 0, 0, filename.c_str())
 {
 	setBoardSpace(-1);
 	setRank(3);
