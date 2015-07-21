@@ -1,12 +1,17 @@
 #ifndef PLAYER_h
 #define PLAYER_h
 
+#include <string>
+
+using namespace std;
+
 class Player{
   public:
     Player(int type);
-    ~Player();
+    virtual ~Player();
     inline int getType() const; // 0:P 1:C -1:E
     inline bool operator==(const Player& rhs) const;
+    virtual string getName() const = 0;
   //end public
   private:
     int type_;

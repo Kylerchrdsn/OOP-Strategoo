@@ -15,14 +15,12 @@
 
 using namespace std;
 
-class Human : public Player
-{
+class Human : public Player{
   public:
     //constructors and destructor
     Human();
     Human(std::string& currentPlayer);
     ~Human();
-
     //setters
     inline void setName(const std::string& newPlayer);
     inline void setGamesPlayed(int input) const;
@@ -32,7 +30,7 @@ class Human : public Player
     inline void setCapturedFlags(const int input) const;
     inline void setTimesExtinct(const int input) const;
     inline void setGenocide(const int input) const;
-
+    virtual inline std::string getName() const;
     //collection functions
     void addPiece(Piece* const piece);
     void clearPiece(const int boardSpace);
@@ -40,7 +38,6 @@ class Human : public Player
     Piece* findUnplacedPiece(const int buttonRank);
     Piece* findPieceAtPosition(const int position);
     inline int getNumPieces() const;
-
     //statistics functions
     void setStatisticsSprites() const;
     bool loadStatistics() const;
@@ -78,4 +75,8 @@ inline void Human::setGenocide(const int input) const{ stats->setGenocide(input)
 inline void Human::clearPieces(){ pieces.clear(); }
 //*****************************************************
 inline int Human::getNumPieces() const{ return pieces.size(); }
+//*****************************************************
+inline std::string Human::getName() const{ return name; }
+
 #endif
+

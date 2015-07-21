@@ -559,8 +559,7 @@ bool Game::doPlayGame(){
 			while(SDL_PollEvent(&gEvent)){
 				//if the user has exited the window
 				if(gEvent.type == SDL_QUIT){
-					//set next state to exit
-					setState(STATE_EXIT);
+					setState(STATE_EXIT); // set next state to exit
 					playingGame = false;
 				}else if(gEvent.type == SDL_KEYDOWN){ // else if the user has hit the enter key
 					if(gEvent.key.keysym.sym == SDLK_m){
@@ -578,20 +577,14 @@ bool Game::doPlayGame(){
 			if(firstFrame){
 				//check to see if the game has been won by player
 				if(checkPlayerWins()){
-					//set winner to player
-					winningTeam = 0;
-					//set game result sprite to player wins
-					gameResult = playerWinsImage;
-					//play win theme music after stopping current music
-					gameSound->stopMusic();
+					winningTeam = 0;                // set winner to player
+					gameResult = playerWinsImage;   // set game result sprite to player wins
+					gameSound->stopMusic();         // play win theme music after stopping current music
 					gameSound->playWinTheme();
 				}else if(checkComputerWins()){
-					//set winner to computer
-					winningTeam = 1;
-					//set game result sprite to computer wins
-					gameResult = computerWinsImage;
-					//play lose theme music after stopping current music
-					gameSound->stopMusic();
+					winningTeam = 1;                // set winner to computer
+					gameResult = computerWinsImage; // set game result sprite to computer wins
+					gameSound->stopMusic();         // play lose theme music after stopping current music
 					gameSound->playLoseTheme();
 				}
 
@@ -600,12 +593,12 @@ bool Game::doPlayGame(){
 
 			//if no piece has been selected
 			if(selected == 0 && destination == 0){
-				selected = gBoard->findSelectedPiece();
+        selected = gBoard->findSelectedPiece();
 
 				//if a piece was found
 				if(selected != 0){
 					//if the piece is moveable
-					if(isMoveablePiece(selected, 0)){
+					if(isMoveablePiece(selected, gHuman)){
 						//reset selected variable
 						selected->setIsSelected(false);
 						//set overlay to show
@@ -764,7 +757,7 @@ bool Game::doPlayGame(){
 						destination = 0;
 					}
 				}else if(destination != 0){
-					if(destination->getOwner() == selected->getOwner() && isMoveablePiece(destination, 0)){
+					if(destination->getOwner() == selected->getOwner() && isMoveablePiece(destination, gHuman)){
 						//set selected to destination, reset destination,
 						//and update piece overlay
 						selected = destination;
@@ -1799,7 +1792,7 @@ void Game::updatePlayByPlay(Piece* const first, Piece* const second, const Playe
 
 	//if player moved
 	if(mover->getType() == 0){
-		ss << "Player's ";
+		ss << mover->getName() << "'s ";
 
 		switch(first->getRank()){
       //marshal
@@ -2031,7 +2024,7 @@ void Game::updatePlayByPlay(Piece* const first, Piece* const second, const Playe
 		//update playByPlay image
 		playByPlayTwo->setSurfaceNoFree(newMessage);
 		ss.str("");
-		ss << "Player's ";
+		ss << gHuman->getName() << "'s ";
 
 		switch(second->getRank()){
       //flag
@@ -2110,7 +2103,7 @@ void Game::updatePlayByPlay(Piece* const moved, Piece* const destination, const 
 	SDL_Color textColor = {0, 0, 0};
 
 	if(mover->getType() == 0){
-		ss << "Player moves a ";
+		ss << gHuman->getName() << " moves a ";
 	}else{
 		ss << "Gary moves a ";
 	}

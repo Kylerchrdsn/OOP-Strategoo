@@ -38,12 +38,9 @@ void Piece::setBoardSpace(const int boardSpace){
 	}
 }
 //*****************************************************
-void Piece::setOwner(Player* owner){
-  owner_ = owner;
-}
+void Piece::setOwner(Player* owner){ owner_ = owner; }
 //*****************************************************
-void Piece::swapLocation(Piece* const other)
-{
+void Piece::swapLocation(Piece* const other){
 	//x, y, and boardspace
 	int x = 0,
 		y = 0,
@@ -65,26 +62,21 @@ void Piece::swapLocation(Piece* const other)
 	other->setBoardSpace(boardSpace);
 }
 //*****************************************************
-void Piece::handleInput(SDL_Event& gEvent)
-{
+void Piece::handleInput(SDL_Event& gEvent){
 	//mouse offsets
 	int x = 0,
-		y = 0;
+      y = 0;
 
 	//if the mouse was clicked
-	if(gEvent.type == SDL_MOUSEBUTTONDOWN)
-	{
+	if(gEvent.type == SDL_MOUSEBUTTONDOWN){
 		//if the left mouse button was clicked
-		if(gEvent.button.button == SDL_BUTTON_LEFT)
-		{
+		if(gEvent.button.button == SDL_BUTTON_LEFT){
 			//get mouse offsets
 			x = gEvent.button.x;
 			y = gEvent.button.y;
 
 			//if the mouse was over the button when it was clicked
-			if((x > pieceImage->getXPos()) && (x < pieceImage->getXPos() + 60) &&
-			   (y > pieceImage->getYPos()) && (y < pieceImage->getYPos() + 60))
-			{
+			if((x > pieceImage->getXPos()) && (x < pieceImage->getXPos() + 60) && (y > pieceImage->getYPos()) && (y < pieceImage->getYPos() + 60)){
 				//button is selected
 				setIsSelected(true);
 			}

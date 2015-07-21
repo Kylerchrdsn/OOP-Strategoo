@@ -37,28 +37,20 @@ void Computer::clearPiece(const int boardSpace){
 Piece* Computer::findPieceAtPosition(const int position){ return pieces[position]; }
 //*****************************************************
 void Computer::setPieces(){
-	//vector to hold board spaces
-	std::vector<int> vect;
-	//iterator
-	std::vector<Piece*>::iterator iter;
-	//counter
-	int i = 0;
-	//seed timer
-	srand(unsigned(time(0)));
+	std::vector<int> vect;              // vector to hold board spaces
+	std::vector<Piece*>::iterator iter; // iterator
+	int i = 0;                          // counter
+	srand(unsigned(time(0)));           // seed timer
 
-	for(int x = 0; x < 40; x++){
-		vect.push_back(x);
-	}
+	for(int x = 0; x < 40; x++){ vect.push_back(x); }
 
 	//shuffle vector
 	std::random_shuffle(vect.begin(), vect.end());
 
 	//assign pieces board space and rendering position
 	for(iter = pieces.begin(); iter != pieces.end(); iter++){
-		//assign board space
-		(*iter)->setBoardSpace(vect.at(i));
-		//increment
-		i++;
+		(*iter)->setBoardSpace(vect.at(i)); // assign board space
+		i++;                                // increment
 
 		//assign rendering position
 		if((*iter)->getBoardSpace() < 10){

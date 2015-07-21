@@ -6,67 +6,47 @@
 ******************************************************/
 #include "headers/Board.h"
 
-Board::Board()
-{
-	//nothing to do
-}
-
 //*****************************************************
-void Board::addPiece(Piece* const piece)
-{
-	if(piece != 0)
-	{
+Board::Board(){ /* nothing to do */ }
+//*****************************************************
+void Board::addPiece(Piece* const piece){
+	if(piece != 0){
 		pieces.push_back(piece);
 	}
 }
-
 //*****************************************************
-void Board::clearPiece(const int boardSpace)
-{
+void Board::clearPiece(const int boardSpace){
 	//iterator
 	std::vector<Piece*>::iterator iter = pieces.begin();
-
 	//found boolean
 	bool found = false;
 
-	while(!found && iter != pieces.end())
-	{
-		if((*iter)->getBoardSpace() == boardSpace)
-		{
+	while(!found && iter != pieces.end()){
+		if((*iter)->getBoardSpace() == boardSpace){
 			found = true;
-
 			pieces.erase(iter);
 		}
 
-		if(!found)
-		{
+		if(!found){
 			iter++;
 		}
 	}
 }
-
 //*****************************************************
-Piece* Board::findSelectedPiece()
-{
+Piece* Board::findSelectedPiece(){
 	//temp piece
 	Piece* temp = 0;
-
 	//found boolean
 	bool found = false;
-
 	//iterator
 	std::vector<Piece*>::iterator iter = pieces.begin();
 
-	while(iter != pieces.end() && !found)
-	{
+	while(iter != pieces.end() && !found){
 		//if the piece has been selected
-		if((*iter)->getIsSelected())
-		{
+		if((*iter)->getIsSelected()){
 			temp = *iter;
-
 			//reset piece
 			temp->setIsSelected(false);
-
 			found = true;
 		}
 
@@ -231,189 +211,139 @@ bool Board::isMoveablePiece(Piece* const selected, const Player* mover){
 	return movablePiece;
 }
 //*****************************************************
-bool Board::isValidScoutMove(Piece* const scout, Piece* const destination)
-{
-	//temporary piece
-	Piece* temp = 0;
-
-	//valid  and found booleans
+bool Board::isValidScoutMove(Piece* const scout, Piece* const destination){
+	// temporary piece
+	Piece* tmpPiece = 0;
+	// valid  and found booleans
 	bool valid = true,
-		 found = false;
-
-	//counter variable
+       found = false;
+	// counter variable
 	int i = 0;
-
-	//direction to destination
-	//up - 1, right - 2, down - 3, left - 4
+	// direction to destination
+	// up - 1, right - 2, down - 3, left - 4
 	int direction = 0;
 
-	if((scout->getBoardSpace() % 10) == (destination->getBoardSpace() % 10))
-	{
-		if(scout->getBoardSpace() > destination->getBoardSpace())
-		{
+	if((scout->getBoardSpace() % 10) == (destination->getBoardSpace() % 10)){
+		if(scout->getBoardSpace() > destination->getBoardSpace()){
 			direction = 1;
-		}
-		else
-		{
+		}else{
 			direction = 3;
 		}
-	}
-	else
-	{
-		if(scout->getBoardSpace() > destination->getBoardSpace())
-		{
+	}else{
+		if(scout->getBoardSpace() > destination->getBoardSpace()){
 			direction = 4;
-		}
-		else
-		{
+		}else{
 			direction = 2;
 		}
 	}
 
-	switch(direction)
-	{
-	//above
-	case 1:
-		i = scout->getBoardSpace() - 10;
+	switch(direction){
+    // above
+    case 1:
+      i = scout->getBoardSpace() - 10;
 
-		while(!found && i > -1)
-		{
-			temp = findPieceAtBoardSpace(i);
+      while(!found && i > -1){
+        tmpPiece = findPieceAtBoardSpace(i);
 
-			if(temp != 0)
-			{
-				if(temp->getBoardSpace() == destination->getBoardSpace())
-				{
-					found = true;
-				}
+        if(tmpPiece != 0){
+          if(tmpPiece->getBoardSpace() == destination->getBoardSpace()){
+            found = true;
+          }
 
-				if(temp->getBoardSpace() != destination->getBoardSpace() &&
-				   temp->getRank() != 0)
-				{
-					valid = false;
-				}
-			}
-			else
-			{
-				found = true;
+          if(tmpPiece->getBoardSpace() != destination->getBoardSpace() && tmpPiece->getRank() != 0){
+            valid = false;
+          }
+        }else{
+          found = true;
+          valid = false;
+        }
 
-				valid = false;
-			}
+        i -= 10;
+      }
+    break;
 
-			i -= 10;
-		}
+    // to the right of
+    case 2:
+      i = scout->getBoardSpace() + 1;
 
-		break;
+      while(!found && i < (((scout->getBoardSpace() / 10) + 1) * 10)){
+        tmpPiece = findPieceAtBoardSpace(i);
 
-	//to the right of
-	case 2:
-		i = scout->getBoardSpace() + 1;
+        if(tmpPiece != 0){
+          if(tmpPiece->getBoardSpace() == destination->getBoardSpace()){
+            found = true;
+          }
 
-		while(!found && i < (((scout->getBoardSpace() / 10) + 1) * 10))
-		{
-			temp = findPieceAtBoardSpace(i);
+          if(tmpPiece->getBoardSpace() != destination->getBoardSpace() && tmpPiece->getRank() != 0){
+            valid = false;
+          }
+        }else{
+          found = true;
+          valid = false;
+        }
 
-			if(temp != 0)
-			{
-				if(temp->getBoardSpace() == destination->getBoardSpace())
-				{
-					found = true;
-				}
+        i++;
+      }
+    break;
 
-				if(temp->getBoardSpace() != destination->getBoardSpace() &&
-				   temp->getRank() != 0)
-				{
-					valid = false;
-				}
-			}
-			else
-			{
-				found = true;
+    //below
+    case 3:
+      i = scout->getBoardSpace() + 10;
 
-				valid = false;
-			}
+      while(!found && i < 100){
+        tmpPiece = findPieceAtBoardSpace(i);
 
-			i++;
-		}
+        if(tmpPiece != 0){
+          if(tmpPiece->getBoardSpace() == destination->getBoardSpace()){
+            found = true;
+          }
 
-		break;
+          if(tmpPiece->getBoardSpace() != destination->getBoardSpace() && tmpPiece->getRank() != 0){
+            valid = false;
+          }
+        }else{
+          found = true;
+          valid = false;
+        }
 
-	//below
-	case 3:
-		i = scout->getBoardSpace() + 10;
+        i += 10;
+      }
+    break;
 
-		while(!found && i < 100)
-		{
-			temp = findPieceAtBoardSpace(i);
+    //to the left of
+    case 4:
+      i = scout->getBoardSpace() - 1;
 
-			if(temp != 0)
-			{
-				if(temp->getBoardSpace() == destination->getBoardSpace())
-				{
-					found = true;
-				}
+      while(!found && i > (((scout->getBoardSpace() / 10) * 10)) - 1){
+        tmpPiece = findPieceAtBoardSpace(i);
 
-				if(temp->getBoardSpace() != destination->getBoardSpace() &&
-				   temp->getRank() != 0)
-				{
-					valid = false;
-				}
-			}
-			else
-			{
-				found = true;
+        if(tmpPiece != 0){
+          if(tmpPiece->getBoardSpace() == destination->getBoardSpace()){
+            found = true;
+          }
 
-				valid = false;
-			}
+          if(tmpPiece->getBoardSpace() != destination->getBoardSpace() && tmpPiece->getRank() != 0){
+            valid = false;
+          }
+        }else{
+          found = true;
+          valid = false;
+        }
 
-			i += 10;
-		}
-		break;
-
-	//to the left of
-	case 4:
-		i = scout->getBoardSpace() - 1;
-
-		while(!found && i > (((scout->getBoardSpace() / 10) * 10)) - 1)
-		{
-			temp = findPieceAtBoardSpace(i);
-
-			if(temp != 0)
-			{
-				if(temp->getBoardSpace() == destination->getBoardSpace())
-				{
-					found = true;
-				}
-
-				if(temp->getBoardSpace() != destination->getBoardSpace() &&
-				   temp->getRank() != 0)
-				{
-					valid = false;
-				}
-			}
-			else
-			{
-				found = true;
-
-				valid = false;
-			}
-
-			i--;
-		}
-		break;
+        i--;
+      }
+    break;
 	}
 
 	return valid;
 }
 
 //*****************************************************
-void Board::handlePieceInput(SDL_Event& gEvent)
-{
+void Board::handlePieceInput(SDL_Event& gEvent){
 	//iterator
 	std::vector<Piece*>::iterator iter;
 
-	for(iter = pieces.begin(); iter != pieces.end(); iter++)
-	{
+	for(iter = pieces.begin(); iter != pieces.end(); iter++){
 		(*iter)->handleInput(gEvent);
 	}
 }
